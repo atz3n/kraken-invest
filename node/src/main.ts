@@ -1,8 +1,11 @@
 import { EnvVars } from "./lib/EnvVars";
 import { Kraken, PRIVATE_METHOD, PUBLIC_METHOD } from "./lib/Kraken";
+import { schedule } from "node-cron";
 
 async function main() {
-    await buy();
+    schedule(EnvVars.CRON_SCHEDULE, () => {
+        buy();
+    });
 }
 
 async function buy() {
