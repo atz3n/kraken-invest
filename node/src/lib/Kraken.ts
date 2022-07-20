@@ -1,6 +1,57 @@
 import axios from "axios";
 import crypto from "crypto";
-import { PRIVATE_METHOD, PUBLIC_METHOD } from "../constants";
+
+
+export enum PRIVATE_METHOD {
+    Balance = "Balance",
+    BalanceEx = "BalanceEx",
+    TradeBalance = "TradeBalance",
+    OpenOrders = "OpenOrders",
+    ClosedOrders = "ClosedOrders",
+    QueryOrders = "QueryOrders",
+    TradesHistory = "TradesHistory",
+    QueryTrades = "QueryTrades",
+    OpenPositions = "OpenPositions",
+    Ledgers = "Ledgers",
+    QueryLedgers = "QueryLedgers",
+    TradeVolume = "TradeVolume",
+    AddExport = "AddExport",
+    ExportStatus = "ExportStatus",
+    RetrieveExport = "RetrieveExport",
+    RemoveExport = "RemoveExport",
+    GetWebSocketsToken = "GetWebSocketsToken",
+    AddOrder = "AddOrder",
+    AddOrderBatch = "AddOrderBatch",
+    EditOrder = "EditOrder",
+    CancelOrder = "CancelOrder",
+    CancelAll = "CancelAll",
+    CancelAllOrdersAfter = "CancelAllOrdersAfter",
+    DepositMethods = "DepositMethods",
+    DepositAddresses = "DepositAddresses",
+    DepositStatus = "DepositStatus",
+    WithdrawInfo = "WithdrawInfo",
+    Withdraw = "Withdraw",
+    WithdrawStatus = "WithdrawStatus",
+    WithdrawCancel = "WithdrawCancel",
+    WalletTransfer = "WalletTransfer",
+    StakingAsset= "Staking/Assets",
+    Stake = "Stake",
+    Unstake = "Unstake",
+    StakingPending = "Staking/Pending",
+    StakingTransactions = "Staking/Transactions"
+}
+
+export enum PUBLIC_METHOD {
+    Time = "Time",
+    Assets = "Assets",
+    AssetPairs = "AssetPairs",
+    Ticker = "Ticker",
+    OHLC = "OHLC",
+    Depth = "Depth",
+    Trades = "Trades",
+    Spread = "Spread",
+    SystemStatus = "SystemStatus"
+}
 
 
 export interface KrakenOptions {
@@ -24,30 +75,34 @@ export class Kraken {
     }
 
 
-    public async request(method: PRIVATE_METHOD | PUBLIC_METHOD, params?: string[]): Promise<object> {
-        let response = {};
+    public async request<T>(method: PRIVATE_METHOD | PUBLIC_METHOD, params?: string[]): Promise<T> {
+        let response = <{error: []}> {};
         let paramsString = "";
 
         params?.forEach(param => paramsString += param + "&");
         paramsString.slice(0, -1);
 
         if (Object.values(PRIVATE_METHOD).includes(<PRIVATE_METHOD> method)) {
-            response = await this.queryPrivateEndpoint(<PRIVATE_METHOD> method, paramsString);
+            response = <{error: []}> await this.queryPrivateEndpoint(<PRIVATE_METHOD> method, paramsString);
         }
         if (Object.values(PUBLIC_METHOD).includes(<PUBLIC_METHOD> method)) {
-            response = await this.queryPublicEndpoint(<PUBLIC_METHOD> method, paramsString);
+            response = <{error: []}> await this.queryPublicEndpoint(<PUBLIC_METHOD> method, paramsString);
         }
 
-        return response;
+        if (response.error.length > 0) {
+            throw new Error(JSON.stringify(response.error));
+        }
+
+        return <T> <unknown> response;
     }
 
-    private async queryPublicEndpoint(apiMethod: PUBLIC_METHOD, inputParameters: string): Promise<object> {
+    private async queryPublicEndpoint(apiMethod: PUBLIC_METHOD, inputParameters: string): Promise<unknown> {
         const url = Kraken.BASE_DOMAIN + Kraken.PUBLIC_PATH + apiMethod + "?" + inputParameters;
         const jsonData = await axios.get(url);
         return jsonData.data;
     }
 
-    private async queryPrivateEndpoint(apiMethod: PRIVATE_METHOD, inputParameters: string): Promise<object> {
+    private async queryPrivateEndpoint(apiMethod: PRIVATE_METHOD, inputParameters: string): Promise<unknown> {
         const url = Kraken.BASE_DOMAIN + Kraken.PRIVATE_PATH + apiMethod;
 
         const nonce = Date.now().toString();
