@@ -18,7 +18,9 @@ export class EnvVars {
     public static BASE_TICKER = "";
     public static QUOTE_INVESTING_AMOUNT = 0;
     public static VOLUME_DECIMAL = 0;
-    public static CRON_SCHEDULE = "";
+    public static TRADE_CRON_SCHEDULE = "";
+    public static WITHDRAW_CRON_SCHEDULE = "";
+    public static WITHDRAWAL_ADDRESS = "";
 
 
     public static load(): void {
@@ -47,9 +49,15 @@ export class EnvVars {
         this.setVar("VOLUME_DECIMAL", (envVar) => {
             this.VOLUME_DECIMAL = Number(envVar);
         }, 5);
-        this.setVar("CRON_SCHEDULE", (envVar) => {
-            this.CRON_SCHEDULE = String(envVar);
+        this.setVar("TRADE_CRON_SCHEDULE", (envVar) => {
+            this.TRADE_CRON_SCHEDULE = String(envVar);
         }, "0 3 * * 6");
+        this.setVar("WITHDRAW_CRON_SCHEDULE", (envVar) => {
+            this.WITHDRAW_CRON_SCHEDULE = String(envVar);
+        }, "0 3 * * 6");
+        this.setVar("WITHDRAWAL_ADDRESS", (envVar) => {
+            this.WITHDRAWAL_ADDRESS = String(envVar);
+        });
     }
 
     private static set_RUN_CONTEXT(): void {
