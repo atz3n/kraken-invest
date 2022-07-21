@@ -75,12 +75,16 @@ export class Kraken {
     }
 
 
-    public async request<T>(method: PRIVATE_METHOD | PUBLIC_METHOD, params?: string[]): Promise<T> {
+    public async request<T>(method: PRIVATE_METHOD | PUBLIC_METHOD, params?: Record<string, string>): Promise<T> {
         let response = <{error: []}> {};
         let paramsString = "";
 
-        params?.forEach(param => paramsString += param + "&");
-        paramsString.slice(0, -1);
+        if (params) {
+            for (const [key, value] of Object.entries(params)) {
+                paramsString += key + "=" + value + "&";
+            }
+            paramsString = paramsString.slice(0, -1);
+        }
 
         if (Object.values(PRIVATE_METHOD).includes(<PRIVATE_METHOD> method)) {
             response = <{error: []}> await this.queryPrivateEndpoint(<PRIVATE_METHOD> method, paramsString);
