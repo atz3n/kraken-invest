@@ -2,10 +2,17 @@ import { schedule } from "node-cron";
 import { EnvVars } from "./lib/EnvVars";
 import { Kraken } from "./lib/Kraken";
 import { withdraw } from "./utils/funding";
+import { ConsoleTransport, initLogger } from "./utils/logging";
 import { buy } from "./utils/trading";
 
 
 async function main() {
+    initLogger({
+        level: "info",
+        transports: [
+            new ConsoleTransport()
+        ]
+    });
     const kraken = new Kraken({
         apiPrivateKey: EnvVars.KRAKEN_API_PRIVATE_KEY,
         apiPublicKey: EnvVars.KRAKEN_API_PUBLIC_KEY
@@ -19,6 +26,5 @@ async function main() {
         withdraw(kraken);
     });
 }
-
 
 main();

@@ -4,9 +4,10 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
         "dev": "RUN_CONTEXT=development yarn dev:cmd",
         "dev:cmd": "ts-node-dev --cache-directory ./dev ./src/main",
+        "lint": "eslint ./ --ext .ts",
+        "lint:fix": "eslint ./ --fix --ext .ts",
         "build": "rm -rf ./dist && tsc",
         "start": "node ./dist/main.js"
     },
@@ -26,6 +27,7 @@
         "axios": "^0.27.2",
         "dotenv": "^10.0.0",
         "node-cron": "^3.0.1",
-        "uuid": "^8.3.2"
+        "uuid": "^8.3.2",
+        "winston": "^3.8.1"
     }
 }

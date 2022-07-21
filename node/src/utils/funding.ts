@@ -1,10 +1,11 @@
 import { EnvVars } from "../lib/EnvVars";
 import { Kraken, PRIVATE_METHOD } from "../lib/Kraken";
+import { logger } from "./logging";
 
 
 export async function withdraw(kraken: Kraken): Promise<void> {
     try {
-        const balances = await kraken.request<{ result: any }>(PRIVATE_METHOD.Balance);
+        const balances = await kraken.request<{ result: never }>(PRIVATE_METHOD.Balance);
         const baseBalance = balances.result[EnvVars.BASE_TICKER];
 
         const withdraw = await kraken.request<{ result: { refid: string }}>(PRIVATE_METHOD.Withdraw, {
@@ -12,8 +13,9 @@ export async function withdraw(kraken: Kraken): Promise<void> {
             key: EnvVars.WITHDRAWAL_ADDRESS,
             amount: baseBalance
         });
-        console.log(withdraw.result.refid);
+
+        logger.info(`Set withdrawal ${withdraw.result.refid} to withdraw ${baseBalance} ${EnvVars.BASE_TICKER}`);
     } catch (error) {
-        console.log((<Error> error).message);
+        logger.error((<Error> error).message);
     }
 }

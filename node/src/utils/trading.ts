@@ -1,15 +1,17 @@
 import { EnvVars } from "../lib/EnvVars";
 import { Kraken, PRIVATE_METHOD, PUBLIC_METHOD } from "../lib/Kraken";
+import { logger } from "./logging";
 
 
 export async function buy(kraken: Kraken): Promise<void> {
     try {
-        const balances = await kraken.request<{ result: any }>(PRIVATE_METHOD.Balance);
+        const balances = await kraken.request<{ result: never }>(PRIVATE_METHOD.Balance);
         if (balances.result[EnvVars.QUOTE_TICKER] <= EnvVars.QUOTE_INVESTING_AMOUNT) {
             throw new Error("Not enough funds");
         }
 
         const pair = `${EnvVars.BASE_TICKER}${EnvVars.QUOTE_TICKER}`;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const price = await kraken.request<{ result: any }>(PUBLIC_METHOD.Ticker, { pair });
         const askPrice = price.result[pair].a[0];
         const volume = (EnvVars.QUOTE_INVESTING_AMOUNT / askPrice).toFixed(EnvVars.VOLUME_DECIMAL);
@@ -20,8 +22,10 @@ export async function buy(kraken: Kraken): Promise<void> {
             pair,
             volume
         });
-        console.log(order.result.txid[0]);
+
+        // eslint-disable-next-line max-len
+        logger.info(`Set order ${order.result.txid[0]} to buy ${volume} ${EnvVars.BASE_TICKER} with ${EnvVars.QUOTE_TICKER}`);
     } catch (error) {
-        console.log((<Error> error).message);
+        logger.error((<Error> error).message);
     }
 }
