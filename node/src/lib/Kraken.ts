@@ -140,6 +140,7 @@ export class Kraken {
         const apiPost = nonce + apiPostBodyData;
         const secret = Buffer.from(apiPrivateKey, "base64");
         const sha256 = crypto.createHash("sha256");
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const hash256 = (<any> sha256.update(apiPost)).digest("binary");
         const hmac512 = crypto.createHmac("sha512", secret);
         const signatureString = hmac512.update(apiPath + apiMethod + hash256, "binary").digest("base64");

@@ -54,7 +54,7 @@ export class EnvVars {
         }, "0 3 * * 6");
         this.setVar("WITHDRAW_CRON_SCHEDULE", (envVar) => {
             this.WITHDRAW_CRON_SCHEDULE = String(envVar);
-        }, "0 3 * * 6");
+        }, "0 4 1 * *");
         this.setVar("WITHDRAWAL_ADDRESS", (envVar) => {
             this.WITHDRAWAL_ADDRESS = String(envVar);
         });
