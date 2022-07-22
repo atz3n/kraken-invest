@@ -1,0 +1,17 @@
+version: "3.8"
+networks:
+  asset-cost-average-network:
+    external: false
+services:
+  asset-cost-average:
+    image: asset-cost-average
+    networks:
+      - asset-cost-average-network
+    environment:
+      - KRAKEN_API_PUBLIC_KEY=<your Kraken API key>
+      - KRAKEN_API_PRIVATE_KEY=<your Kraken API secret>
+      - QUOTE_TICKER=ZEUR
+      - QUOTE_INVESTING_AMOUNT=10
+      - BASE_TICKER=XXBT
+      - VOLUME_DECIMALS=5
+      - TRADE_CRON_SCHEDULE="0 3 * * 6"
