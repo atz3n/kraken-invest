@@ -19,6 +19,7 @@ export class EnvVars {
     public static QUOTE_INVESTING_AMOUNT = 0;
     public static VOLUME_DECIMAL = 0;
     public static TRADE_CRON_SCHEDULE = "";
+    public static ENABLE_WITHDRAWAL = false;
     public static WITHDRAW_CRON_SCHEDULE = "";
     public static WITHDRAWAL_ADDRESS = "";
 
@@ -52,12 +53,18 @@ export class EnvVars {
         this.setVar("TRADE_CRON_SCHEDULE", (envVar) => {
             this.TRADE_CRON_SCHEDULE = String(envVar);
         }, "0 3 * * 6");
+        this.setVar("ENABLE_WITHDRAWAL", (envVar) => {
+            this.ENABLE_WITHDRAWAL = this.Boolean(envVar);
+        }, false);
         this.setVar("WITHDRAW_CRON_SCHEDULE", (envVar) => {
             this.WITHDRAW_CRON_SCHEDULE = String(envVar);
         }, "0 4 1 * *");
         this.setVar("WITHDRAWAL_ADDRESS", (envVar) => {
             this.WITHDRAWAL_ADDRESS = String(envVar);
         });
+        if (this.ENABLE_WITHDRAWAL && (this.WITHDRAWAL_ADDRESS === "" || this.WITHDRAWAL_ADDRESS === undefined)) {
+            throw new Error("WITHDRAWAL_ADDRESS must be defined");
+        }
     }
 
     private static set_RUN_CONTEXT(): void {
@@ -77,6 +84,10 @@ export class EnvVars {
         } else {
             throw new Error(`${envVarName} must be defined`);
         }
+    }
+
+    private static Boolean(value: unknown): boolean {
+        return value === true ? true : value === "true";
     }
 }
 

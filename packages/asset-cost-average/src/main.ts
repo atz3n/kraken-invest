@@ -6,13 +6,14 @@ import { ConsoleTransport, initLogger } from "./utils/logging";
 import { buy } from "./utils/trading";
 
 
-async function main() {
+function main() {
     initLogger({
         level: "info",
         transports: [
             new ConsoleTransport()
         ]
     });
+
     const kraken = new Kraken({
         apiPrivateKey: EnvVars.KRAKEN_API_PRIVATE_KEY,
         apiPublicKey: EnvVars.KRAKEN_API_PUBLIC_KEY
@@ -22,9 +23,11 @@ async function main() {
         buy(kraken);
     });
 
-    schedule(EnvVars.WITHDRAW_CRON_SCHEDULE, () => {
-        withdraw(kraken);
-    });
+    if (EnvVars.ENABLE_WITHDRAWAL) {
+        schedule(EnvVars.WITHDRAW_CRON_SCHEDULE, () => {
+            withdraw(kraken);
+        });
+    }
 }
 
 main();
