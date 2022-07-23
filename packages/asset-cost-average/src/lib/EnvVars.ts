@@ -12,8 +12,8 @@ export class EnvVars {
     private static isInitialized = false;
 
     public static RUN_CONTEXT = RUN_CONTEXT.PRODUCTION;
-    public static KRAKEN_API_PRIVATE_KEY = "";
-    public static KRAKEN_API_PUBLIC_KEY = "";
+    public static KRAKEN_PRIVATE_KEY = "";
+    public static KRAKEN_API_KEY = "";
     public static QUOTE_TICKER = "";
     public static BASE_TICKER = "";
     public static QUOTE_INVESTING_AMOUNT = 0;
@@ -32,21 +32,21 @@ export class EnvVars {
 
         this.set_RUN_CONTEXT();
 
-        this.setVar("KRAKEN_API_PRIVATE_KEY", (envVar) => {
-            this.KRAKEN_API_PRIVATE_KEY = String(envVar);
+        this.setVar("KRAKEN_PRIVATE_KEY", (envVar) => {
+            this.KRAKEN_PRIVATE_KEY = String(envVar);
         });
-        this.setVar("KRAKEN_API_PUBLIC_KEY", (envVar) => {
-            this.KRAKEN_API_PUBLIC_KEY = String(envVar);
+        this.setVar("KRAKEN_API_KEY", (envVar) => {
+            this.KRAKEN_API_KEY = String(envVar);
         });
         this.setVar("QUOTE_TICKER", (envVar) => {
             this.QUOTE_TICKER = String(envVar);
-        }, "ZEUR");
+        });
         this.setVar("BASE_TICKER", (envVar) => {
             this.BASE_TICKER = String(envVar);
-        }, "XXBT");
+        });
         this.setVar("QUOTE_INVESTING_AMOUNT", (envVar) => {
             this.QUOTE_INVESTING_AMOUNT = Number(envVar);
-        }, 100);
+        });
         this.setVar("VOLUME_DECIMAL", (envVar) => {
             this.VOLUME_DECIMAL = Number(envVar);
         }, 5);
@@ -61,8 +61,8 @@ export class EnvVars {
         }, "0 4 1 * *");
         this.setVar("WITHDRAWAL_ADDRESS", (envVar) => {
             this.WITHDRAWAL_ADDRESS = String(envVar);
-        });
-        if (this.ENABLE_WITHDRAWAL && (this.WITHDRAWAL_ADDRESS === "" || this.WITHDRAWAL_ADDRESS === undefined)) {
+        }, "");
+        if (this.ENABLE_WITHDRAWAL && this.WITHDRAWAL_ADDRESS === "") {
             throw new Error("WITHDRAWAL_ADDRESS must be defined");
         }
     }
