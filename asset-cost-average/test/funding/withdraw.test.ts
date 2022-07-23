@@ -44,7 +44,7 @@ if (!config.skipTests.includes("buy")) {
         stepCounter = 1;
     });
 
-    it("should successfully perform a buy workflow", async () => {
+    it("should successfully perform a withdraw workflow", async () => {
         await withdraw(new KrakenMock());
     });
 } else {
