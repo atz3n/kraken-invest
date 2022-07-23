@@ -54,13 +54,18 @@ export enum PUBLIC_METHOD {
 }
 
 
+export interface IKraken {
+    request<T>(method: PRIVATE_METHOD | PUBLIC_METHOD, params?: Record<string, string>): Promise<T>
+}
+
+
 export interface KrakenOptions {
     apiKeyId: string;
     apiKeySecret: string;
 }
 
 
-export class Kraken {
+export class Kraken implements IKraken {
     public static readonly BASE_DOMAIN = "https://api.kraken.com";
     public static readonly PUBLIC_PATH = "/0/public/";
     public static readonly PRIVATE_PATH = "/0/private/";

@@ -19,15 +19,24 @@ function main() {
         apiKeyId: EnvVars.KRAKEN_API_KEY
     });
 
-    schedule(EnvVars.TRADE_CRON_SCHEDULE, () => {
-        buy(kraken);
+    schedule(EnvVars.TRADE_CRON_SCHEDULE, async () => {
+        try {
+            await buy(kraken);
+        } catch (error) {
+            logger.error((<Error> error).message);
+        }
     });
 
     if (EnvVars.ENABLE_WITHDRAWAL) {
-        schedule(EnvVars.WITHDRAW_CRON_SCHEDULE, () => {
-            withdraw(kraken);
+        schedule(EnvVars.WITHDRAW_CRON_SCHEDULE, async () => {
+            try {
+                await withdraw(kraken);
+            } catch (error) {
+                logger.error((<Error> error).message);
+            }
         });
     }
+
     logger.info("Asset Cost Average Bot started.");
 }
 
