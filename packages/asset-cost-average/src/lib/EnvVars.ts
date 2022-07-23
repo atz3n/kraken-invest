@@ -87,7 +87,7 @@ export class EnvVars {
     }
 
     private static Boolean(value: unknown): boolean {
-        return value === true ? true : value === "true";
+        return value === true || value === "true";
     }
 }
 
