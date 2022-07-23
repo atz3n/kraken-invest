@@ -15,7 +15,7 @@ The second, optional functionality is to periodically withdraw the purchased ass
 
 ## Getting Started
 
-There are three ways to get the bot running.
+There are three ways to get the bot running. Each way requires you to have an API key pair created. Have a look at the [How to](https://support.kraken.com/hc/en-us/articles/360000919966-How-to-generate-an-API-key-pair-) to get support. For buying assets you need to give permission to *query funds* and to *create and modify orders*. For withdrawing assets you also need to give permission to *withdraw funds*.
 
 
 ### 1. Docker Compose
