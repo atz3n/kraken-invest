@@ -5,11 +5,11 @@ import { logger } from "./logging";
 
 export async function buy(kraken: IKraken): Promise<void> {
     const balances = await kraken.request<{ result: never }>(PRIVATE_METHOD.Balance);
-    if (balances.result[EnvVars.QUOTE_TICKER] <= EnvVars.QUOTE_INVESTING_AMOUNT) {
+    if (balances.result[EnvVars.QUOTE_SYMBOL] <= EnvVars.QUOTE_INVESTING_AMOUNT) {
         throw new Error("Not enough funds");
     }
 
-    const pair = `${EnvVars.BASE_TICKER}${EnvVars.QUOTE_TICKER}`;
+    const pair = `${EnvVars.BASE_SYMBOL}${EnvVars.QUOTE_SYMBOL}`;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const price = await kraken.request<{ result: any }>(PUBLIC_METHOD.Ticker, { pair });
     const askPrice = price.result[pair].a[0];
@@ -23,5 +23,5 @@ export async function buy(kraken: IKraken): Promise<void> {
     });
 
     // eslint-disable-next-line max-len
-    logger.info(`Set order ${order.result.txid[0]} to buy ${volume} ${EnvVars.BASE_TICKER} with ${EnvVars.QUOTE_TICKER}`);
+    logger.info(`Set order ${order.result.txid[0]} to buy ${volume} ${EnvVars.BASE_SYMBOL} with ${EnvVars.QUOTE_SYMBOL}`);
 }

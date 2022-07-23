@@ -12,6 +12,6 @@ services:
       # Check the settings.env file for the full set of configuration variables
       - KRAKEN_API_KEY=<your Kraken API key>
       - KRAKEN_PRIVATE_KEY=<your Kraken private key>
-      - BASE_TICKER=XXBT
-      - QUOTE_TICKER=ZEUR
+      - BASE_SYMBOL=XXBT
+      - QUOTE_SYMBOL=ZEUR
       - QUOTE_INVESTING_AMOUNT=10

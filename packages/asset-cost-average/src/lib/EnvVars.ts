@@ -14,8 +14,8 @@ export class EnvVars {
     public static RUN_CONTEXT = RUN_CONTEXT.PRODUCTION;
     public static KRAKEN_PRIVATE_KEY = "";
     public static KRAKEN_API_KEY = "";
-    public static QUOTE_TICKER = "";
-    public static BASE_TICKER = "";
+    public static QUOTE_SYMBOL = "";
+    public static BASE_SYMBOL = "";
     public static QUOTE_INVESTING_AMOUNT = 0;
     public static VOLUME_DECIMAL = 0;
     public static TRADE_CRON_SCHEDULE = "";
@@ -38,11 +38,11 @@ export class EnvVars {
         this.setVar("KRAKEN_API_KEY", (envVar) => {
             this.KRAKEN_API_KEY = String(envVar);
         });
-        this.setVar("QUOTE_TICKER", (envVar) => {
-            this.QUOTE_TICKER = String(envVar);
+        this.setVar("QUOTE_SYMBOL", (envVar) => {
+            this.QUOTE_SYMBOL = String(envVar);
         });
-        this.setVar("BASE_TICKER", (envVar) => {
-            this.BASE_TICKER = String(envVar);
+        this.setVar("BASE_SYMBOL", (envVar) => {
+            this.BASE_SYMBOL = String(envVar);
         });
         this.setVar("QUOTE_INVESTING_AMOUNT", (envVar) => {
             this.QUOTE_INVESTING_AMOUNT = Number(envVar);
