@@ -10,7 +10,7 @@
         "lint:fix": "eslint ./ --fix --ext .ts",
         "test": "RUN_CONTEXT=test jest --testEnvironment=node --verbose",
         "build": "rm -rf ./dist && tsc",
-        "start": "node ./dist/src/index.js"
+        "start": "node ./dist/src/main.js"
     },
     "author": "",
     "license": "ISC",
