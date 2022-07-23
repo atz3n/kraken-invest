@@ -1,4 +1,4 @@
-name: build asset cost average image
+name: build asset-cost-averaging image
 
 on:
   workflow_dispatch:
@@ -6,20 +6,20 @@ on:
     branches:
       - main
     paths:
-      - asset-cost-average/**
+      - asset-cost-averaging/**
 
 env:
   # github config
-  PROJECT_DIR: asset-cost-average
+  PROJECT_DIR: asset-cost-averaging
   
   # docker config
-  IMAGE_NAME: asset-cost-average
+  IMAGE_NAME: asset-cost-averaging
   IMAGE_TAG: latest
   REGISTRY_NAME: ghcr.io/atz3n/kraken-invest
 
 jobs:
   test-project:
-    uses: ./.github/workflows/test-asset-cost-average.yml
+    uses: ./.github/workflows/test-asset-cost-averaging.yml
     secrets: inherit
 
   build-image:

@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Stops and removes the docker-compose project
+# Runs the docker-compose project
 
 ###################################################################################################
 # CONFIGURATION
 ###################################################################################################
 
-PROJECT_NAME="asset-cost-average"
+PROJECT_NAME="asset-cost-averaging"
 
 
 ###################################################################################################
@@ -26,4 +26,4 @@ if [ $(uname) == Linux ]; then
 fi
 
 cd ${HERE}/../docker
-${SUDO} docker-compose -p ${PROJECT_NAME} down
+${SUDO} docker-compose -p ${PROJECT_NAME} up -d

@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Pauses the docker-compose project
+# Builds the docker image
 
 ###################################################################################################
 # CONFIGURATION
 ###################################################################################################
 
-PROJECT_NAME="asset-cost-average"
+IMAGE_NAME="asset-cost-averaging"
 
 
 ###################################################################################################
@@ -20,10 +20,4 @@ HERE="$(pwd)/$(dirname $0)"
 # MAIN
 ###################################################################################################
 
-SUDO=""
-if [ $(uname) == Linux ]; then
-    SUDO="sudo"
-fi
-
-cd ${HERE}/../docker
-${SUDO} docker-compose -p ${PROJECT_NAME} stop
+docker build -f ${HERE}/../docker/Dockerfile ${HERE}/.. -t ${IMAGE_NAME}
