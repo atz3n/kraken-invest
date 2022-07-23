@@ -1,13 +1,14 @@
 version: "3.8"
 networks:
-  asset-cost-average-network:
+  asset-cost-averaging-network:
     external: false
 services:
-  asset-cost-average:
-    image: asset-cost-average
-    # image: ghcr.io/atz3n/kraken-invest/asset-cost-average:latest
+  asset-cost-averaging:
+    image: ghcr.io/atz3n/kraken-invest/asset-cost-averaging:latest
+    # To use the locally built image, comment the line above and uncomment the line below
+    # image: asset-cost-averaging
     networks:
-      - asset-cost-average-network
+      - asset-cost-averaging-network
     environment: 
       # Minimum required configuration.
       # Check the settings.env file for the full set of configuration variables

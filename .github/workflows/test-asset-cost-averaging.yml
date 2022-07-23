@@ -1,4 +1,4 @@
-name: test asset cost average
+name: test asset-cost-averaging
 
 on:
   workflow_call:
@@ -6,11 +6,11 @@ on:
     branches:
       - main
     paths:
-      - asset-cost-average/**
+      - asset-cost-averaging/**
 
 env:
   # github config
-  PROJECT_DIR: asset-cost-average
+  PROJECT_DIR: asset-cost-averaging
 
 jobs:
   test-project:
