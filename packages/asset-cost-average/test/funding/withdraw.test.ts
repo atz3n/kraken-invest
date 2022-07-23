@@ -1,6 +1,6 @@
-import { IKraken, PRIVATE_METHOD, PUBLIC_METHOD } from "../src/lib/Kraken";
-import { withdraw } from "../src/utils/funding";
-import { config } from "./config";
+import { IKraken, PRIVATE_METHOD, PUBLIC_METHOD } from "../../src/lib/Kraken";
+import { withdraw } from "../../src/utils/funding";
+import { config } from "../config";
 
 
 // mock kraken lib

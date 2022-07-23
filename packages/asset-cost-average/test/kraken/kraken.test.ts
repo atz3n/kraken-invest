@@ -1,6 +1,6 @@
-import { EnvVars } from "../src/lib/EnvVars";
-import { Kraken, PRIVATE_METHOD, PUBLIC_METHOD } from "../src/lib/Kraken";
-import { config } from "./config";
+import { EnvVars } from "../../src/lib/EnvVars";
+import { Kraken, PRIVATE_METHOD, PUBLIC_METHOD } from "../../src/lib/Kraken";
+import { config } from "../config";
 import crypto from "crypto";
 
 

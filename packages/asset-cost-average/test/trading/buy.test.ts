@@ -1,6 +1,6 @@
-import { IKraken, PRIVATE_METHOD, PUBLIC_METHOD } from "../src/lib/Kraken";
-import { buy } from "../src/utils/trading";
-import { config } from "./config";
+import { IKraken, PRIVATE_METHOD, PUBLIC_METHOD } from "../../src/lib/Kraken";
+import { buy } from "../../src/utils/trading";
+import { config } from "../config";
 
 
 // mock kraken lib
