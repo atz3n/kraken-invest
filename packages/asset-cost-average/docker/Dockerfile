@@ -31,6 +31,9 @@ RUN yarn install --frozen-lockfile
 # Copy source files
 COPY src ./src
 
+# Create a dummy test file to get the correct folder structure compiled
+RUN mkdir test && touch test/index.ts && echo "console.log('dummy')" > test/index.ts
+
 # Build app
 RUN yarn build
 
@@ -51,7 +54,7 @@ COPY package.json .
 COPY --from=deps-collector node_modules ./node_modules
 
 # Copy compiled files
-COPY --from=builder dist ./dist
+COPY --from=builder dist/src ./dist/src
 
 # Set start command
 CMD [ "yarn", "start" ]

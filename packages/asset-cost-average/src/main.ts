@@ -15,8 +15,8 @@ function main() {
     });
 
     const kraken = new Kraken({
-        privateKey: EnvVars.KRAKEN_PRIVATE_KEY,
-        apiKey: EnvVars.KRAKEN_API_KEY
+        apiKeySecret: EnvVars.KRAKEN_PRIVATE_KEY,
+        apiKeyId: EnvVars.KRAKEN_API_KEY
     });
 
     schedule(EnvVars.TRADE_CRON_SCHEDULE, () => {

@@ -55,8 +55,8 @@ export enum PUBLIC_METHOD {
 
 
 export interface KrakenOptions {
-    apiKey: string;
-    privateKey: string;
+    apiKeyId: string;
+    apiKeySecret: string;
 }
 
 
@@ -65,13 +65,13 @@ export class Kraken {
     public static readonly PUBLIC_PATH = "/0/public/";
     public static readonly PRIVATE_PATH = "/0/private/";
 
-    private readonly apiKey?: string;
-    private readonly privateKey?: string;
+    private readonly apiKeyId?: string;
+    private readonly apiKeySecret?: string;
 
 
     constructor(options?: KrakenOptions) {
-        this.privateKey = options?.privateKey;
-        this.apiKey = options?.apiKey;
+        this.apiKeySecret = options?.apiKeySecret;
+        this.apiKeyId = options?.apiKeyId;
     }
 
 
@@ -113,7 +113,7 @@ export class Kraken {
         const apiPostBodyData = "nonce=" + nonce + "&" + inputParameters;
 
         const signature = this.createAuthenticationSignature(
-            this.privateKey || "",
+            this.apiKeySecret || "",
             Kraken.PRIVATE_PATH,
             apiMethod,
             nonce,
@@ -122,7 +122,7 @@ export class Kraken {
 
         const jsonData = await axios.post(url, apiPostBodyData, {
             headers: {
-                "API-Key": this.apiKey || "",
+                "API-Key": this.apiKeyId || "",
                 "API-Sign": signature
             },
             responseType: "arraybuffer"

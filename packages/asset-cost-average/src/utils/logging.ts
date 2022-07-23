@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import winston, { format } from "winston";
+import Transport from "winston-transport";
 
 
 export let logger = <winston.Logger> {};
@@ -12,6 +13,12 @@ export function initLogger(options: winston.LoggerOptions): void {
         debug: 2
     };
     logger = winston.createLogger(options);
+}
+
+
+export class DummyTransport extends Transport {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    public log(info: unknown, callback: unknown): void {}
 }
 
 
