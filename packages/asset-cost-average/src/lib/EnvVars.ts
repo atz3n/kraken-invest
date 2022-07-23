@@ -71,6 +71,9 @@ export class EnvVars {
         if (process.env.RUN_CONTEXT === "development") {
             this.RUN_CONTEXT = RUN_CONTEXT.DEVELOPMENT;
             dotenv.config();
+        } else if (process.env.RUN_CONTEXT === "test") {
+            this.RUN_CONTEXT = RUN_CONTEXT.TEST;
+            dotenv.config({ path: __dirname + "/../../test/test.env" });
         } else {
             dotenv.config();
         }
