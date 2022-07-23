@@ -6,11 +6,11 @@ on:
     branches:
       - main
     paths:
-      - packages/asset-cost-average/**
+      - asset-cost-average/**
 
 env:
   # github config
-  PROJECT_DIR: packages/asset-cost-average
+  PROJECT_DIR: asset-cost-average
 
 jobs:
   test-project:
