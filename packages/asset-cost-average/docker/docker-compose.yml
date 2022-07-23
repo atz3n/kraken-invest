@@ -7,11 +7,11 @@ services:
     image: asset-cost-average
     networks:
       - asset-cost-average-network
-    environment:
-      - KRAKEN_API_PUBLIC_KEY=<your Kraken API key>
-      - KRAKEN_API_PRIVATE_KEY=<your Kraken API secret>
+    environment: 
+      # minimum required configuration.
+      # Check the settings.env file for the full set of configuration variables
+      - KRAKEN_API_KEY=<your Kraken API key>
+      - KRAKEN_PRIVATE_KEY=<your Kraken private key>
+      - BASE_TICKER=XXBT
       - QUOTE_TICKER=ZEUR
       - QUOTE_INVESTING_AMOUNT=10
-      - BASE_TICKER=XXBT
-      - VOLUME_DECIMALS=5
-      - TRADE_CRON_SCHEDULE="0 3 * * 6"
