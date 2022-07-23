@@ -5,6 +5,7 @@ networks:
 services:
   asset-cost-average:
     image: asset-cost-average
+    # image: ghcr.io/atz3n/kraken-invest/asset-cost-average:latest
     networks:
       - asset-cost-average-network
     environment: 
