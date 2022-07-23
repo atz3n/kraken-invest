@@ -8,10 +8,10 @@ services:
     networks:
       - asset-cost-average-network
     environment: 
-      # minimum required configuration.
+      # Minimum required configuration.
       # Check the settings.env file for the full set of configuration variables
       - KRAKEN_API_KEY=<your Kraken API key>
       - KRAKEN_PRIVATE_KEY=<your Kraken private key>
       - BASE_SYMBOL=XXBT
       - QUOTE_SYMBOL=ZEUR
-      - QUOTE_INVESTING_AMOUNT=10
+      - QUOTE_INVESTING_AMOUNT=100
