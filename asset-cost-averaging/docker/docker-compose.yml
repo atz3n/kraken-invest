@@ -5,15 +5,18 @@ networks:
 services:
   asset-cost-averaging:
     image: ghcr.io/atz3n/kraken-invest/asset-cost-averaging:latest
-    # To use the locally built image, comment the line above and uncomment the line below
+    # To use the locally built image, comment the line above and uncomment the line below.
     # image: asset-cost-averaging
     networks:
       - asset-cost-averaging-network
     environment: 
-      # Minimum required configuration.
-      # Check the settings.env file for the full set of configuration variables
+      # Minimum required configuration for finite mode.
+      # This configuration lets your bot buy BTC for EUR 5 times on every Saturday at 3am for 100€.
+      # Total investment would be 100€ * 5 = 500€.
+      # Check the settings.env file for the full set of configuration variables.
       - KRAKEN_API_KEY=<your Kraken API key>
       - KRAKEN_PRIVATE_KEY=<your Kraken private key>
       - BASE_SYMBOL=XXBT
       - QUOTE_SYMBOL=ZEUR
       - QUOTE_INVESTING_AMOUNT=100
+      - NUMBER_OF_BUYS=5 # remove this setting for infinite mode
