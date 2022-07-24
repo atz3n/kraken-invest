@@ -13,6 +13,7 @@ function main() {
             ? [ new ConsoleTransport(), new FileTransport() ]
             : [ new ConsoleTransport() ]
     });
+
     const kraken = new Kraken({
         apiKeySecret: EnvVars.KRAKEN_PRIVATE_KEY,
         apiKeyId: EnvVars.KRAKEN_API_KEY
