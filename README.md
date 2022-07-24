@@ -1,6 +1,6 @@
 # kraken-invest
 
-This repository contains investment strategy bots that use the [Kraken](https://www.kraken.com) Crypto exchange.
+This repository contains investment strategy bots that use the [Kraken](https://www.kraken.com) cryptocurrency exchange.
 
 
 ## Currently implemented
