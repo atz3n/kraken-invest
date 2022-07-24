@@ -19,25 +19,52 @@ function main() {
         apiKeyId: EnvVars.KRAKEN_API_KEY
     });
 
-    schedule(EnvVars.CRON_BUY_SCHEDULE, async () => {
-        try {
-            await buy(kraken);
-        } catch (error) {
-            logger.error((<Error> error).message);
-        }
+    let counter = 0;
+    const task = schedule(EnvVars.CRON_BUY_SCHEDULE, async () => {
+        await buyAction(kraken);
+        counter++;
     });
 
-    if (EnvVars.ENABLE_WITHDRAWAL) {
-        schedule(EnvVars.CRON_WITHDRAW_SCHEDULE, async () => {
-            try {
-                await withdraw(kraken);
-            } catch (error) {
-                logger.error((<Error> error).message);
+    if (EnvVars.NUMBER_OF_BUYS > 0) {
+        const interval = setInterval(async () => {
+            if (counter >= EnvVars.NUMBER_OF_BUYS) {
+                task.stop();
+                clearInterval(interval);
+
+                if (EnvVars.ENABLE_WITHDRAWAL) {
+                    await sleep(60); // wait until order is filled
+                    await withdrawAction(kraken);
+                }
             }
+        }, 1000);
+    } else if (EnvVars.ENABLE_WITHDRAWAL) {
+        schedule(EnvVars.CRON_WITHDRAW_SCHEDULE, async () => {
+            await withdrawAction(kraken);
         });
     }
 
     logger.info("Asset Cost Average Bot started.");
 }
+
+async function buyAction(kraken: Kraken): Promise<void> {
+    try {
+        await buy(kraken);
+    } catch (error) {
+        logger.error((<Error> error).message);
+    }
+}
+
+async function sleep(seconds: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, seconds * 1000));
+}
+
+async function withdrawAction(kraken: Kraken): Promise<void> {
+    try {
+        await withdraw(kraken);
+    } catch (error) {
+        logger.error((<Error> error).message);
+    }
+}
+
 
 main();

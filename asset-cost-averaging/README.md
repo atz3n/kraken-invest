@@ -8,9 +8,11 @@ A simple [description](https://intelligent.schwab.com/article/) of Dollar Cost A
 
 ## General
 
-The bot has a core functionality and an optional functionality. The core functionality is to buy an asset according to the Dollar Cost Averaging strategy. It uses [node-cron](https://www.npmjs.com/package/node-cron) to schedule the purchase actions. Have a look [here](https://crontab.guru) to configure your schedule easily. To buy the asset in a short period of time, the bot uses the *market* type when placing the order and the current *ask* price to calculate the volume. This lets the price amount vary a bit, so that i.e. an investment of $100 may result in an investment of $100.10 or $99.90.
+The bot has a core functionality, an optional functionality and can be used in two modes. The core functionality is to buy an asset according to the Dollar Cost Averaging strategy. This can be done in *finite* and *infinite* mode. In finite mode the bot stops after a certain number of buy actions. The infinit mode is an extension and allows the bot to run and perform buy actions as long as you stop it.
 
-The second, optional functionality is to periodically withdraw the purchased asset to store it in a cold wallet. Even though Kraken is (imho) one of the safest exchanges out there, you should follow the golden rule in the crypto world: *"Not your keys, not your cryptos"*. This is especially true for long-term investment strategies like Dollar Cost Averaging. The schedule can also be configured with a cron schedule expression.
+The bot uses [node-cron](https://www.npmjs.com/package/node-cron) to schedule the buy actions. Have a look [here](https://crontab.guru) to configure your schedule easily. To buy the asset in a short period of time, the bot uses the *market* type when placing the order and the current *ask* price to calculate the volume. This lets the price amount vary a bit, so that i.e. an investment of $100 may result in an investment of $100.10 or $99.90.
+
+The second, optional functionality is to withdraw the purchased asset to store it in a cold wallet. Even though Kraken is (imho) one of the safest exchanges out there, you should follow the golden rule in the crypto world: *"Not your keys, not your cryptos"*. If you enable withdrawal in finite mode, the bot will withdraw your asset after the last buy action. To withdraw your asset in infinite mode, a withdrawal schedule is used, which can also be configured with a cron schedule expression.
 
 
 ## Getting Started
