@@ -17,6 +17,7 @@ export class EnvVars {
     public static QUOTE_SYMBOL = "";
     public static BASE_SYMBOL = "";
     public static QUOTE_INVESTING_AMOUNT = 0;
+    public static NUMBER_OF_BUYS = 0;
     public static VOLUME_DECIMAL = 0;
     public static CRON_BUY_SCHEDULE = "";
     public static ENABLE_WITHDRAWAL = false;
@@ -48,6 +49,9 @@ export class EnvVars {
         this.setVar("QUOTE_INVESTING_AMOUNT", (envVar) => {
             this.QUOTE_INVESTING_AMOUNT = Number(envVar);
         });
+        this.setVar("NUMBER_OF_BUYS", (envVar) => {
+            this.NUMBER_OF_BUYS = Number(envVar);
+        }, -1);
         this.setVar("VOLUME_DECIMAL", (envVar) => {
             this.VOLUME_DECIMAL = Number(envVar);
         }, 5);
