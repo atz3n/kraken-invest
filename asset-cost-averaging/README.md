@@ -74,7 +74,7 @@ yarn start
 
 To start development, you must have [Node.js](https://nodejs.org/en/) and the [Yarn](https://yarnpkg.com) package manager installed. You also need a valid `.env` file. Follow the steps described in the [Plain Section](#3-plain) to create one.
 
-## Commands
+### Commands
 
 ```bash
 # start in watch mode
