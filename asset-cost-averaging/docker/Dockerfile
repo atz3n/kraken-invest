@@ -25,14 +25,14 @@ COPY tsconfig.json .
 COPY package.json .
 COPY yarn.lock .
 
+# Create a dummy test file to get the correct folder structure compiled
+RUN mkdir test && touch test/index.ts && echo "console.log('dummy')" > test/index.ts
+
 # Install dependencies
 RUN yarn install --frozen-lockfile
 
 # Copy source files
 COPY src ./src
-
-# Create a dummy test file to get the correct folder structure compiled
-RUN mkdir test && touch test/index.ts && echo "console.log('dummy')" > test/index.ts
 
 # Build app
 RUN yarn build
