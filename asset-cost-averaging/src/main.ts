@@ -19,7 +19,7 @@ function main() {
         apiKeyId: EnvVars.KRAKEN_API_KEY
     });
 
-    schedule(EnvVars.TRADE_CRON_SCHEDULE, async () => {
+    schedule(EnvVars.CRON_BUY_SCHEDULE, async () => {
         try {
             await buy(kraken);
         } catch (error) {
@@ -28,7 +28,7 @@ function main() {
     });
 
     if (EnvVars.ENABLE_WITHDRAWAL) {
-        schedule(EnvVars.WITHDRAW_CRON_SCHEDULE, async () => {
+        schedule(EnvVars.CRON_WITHDRAW_SCHEDULE, async () => {
             try {
                 await withdraw(kraken);
             } catch (error) {

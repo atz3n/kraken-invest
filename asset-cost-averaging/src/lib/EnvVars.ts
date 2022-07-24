@@ -18,9 +18,9 @@ export class EnvVars {
     public static BASE_SYMBOL = "";
     public static QUOTE_INVESTING_AMOUNT = 0;
     public static VOLUME_DECIMAL = 0;
-    public static TRADE_CRON_SCHEDULE = "";
+    public static CRON_BUY_SCHEDULE = "";
     public static ENABLE_WITHDRAWAL = false;
-    public static WITHDRAW_CRON_SCHEDULE = "";
+    public static CRON_WITHDRAW_SCHEDULE = "";
     public static WITHDRAWAL_ADDRESS = "";
     public static ENABLE_FILE_LOGGING = false;
 
@@ -51,14 +51,14 @@ export class EnvVars {
         this.setVar("VOLUME_DECIMAL", (envVar) => {
             this.VOLUME_DECIMAL = Number(envVar);
         }, 5);
-        this.setVar("TRADE_CRON_SCHEDULE", (envVar) => {
-            this.TRADE_CRON_SCHEDULE = String(envVar);
+        this.setVar("CRON_BUY_SCHEDULE", (envVar) => {
+            this.CRON_BUY_SCHEDULE = String(envVar);
         }, "0 3 * * 6");
         this.setVar("ENABLE_WITHDRAWAL", (envVar) => {
             this.ENABLE_WITHDRAWAL = this.Boolean(envVar);
         }, false);
-        this.setVar("WITHDRAW_CRON_SCHEDULE", (envVar) => {
-            this.WITHDRAW_CRON_SCHEDULE = String(envVar);
+        this.setVar("CRON_WITHDRAW_SCHEDULE", (envVar) => {
+            this.CRON_WITHDRAW_SCHEDULE = String(envVar);
         }, "0 4 1 * *");
         this.setVar("WITHDRAWAL_ADDRESS", (envVar) => {
             this.WITHDRAWAL_ADDRESS = String(envVar);
