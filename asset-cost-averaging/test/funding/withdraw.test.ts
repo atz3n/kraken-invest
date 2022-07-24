@@ -5,6 +5,7 @@ import { config } from "../config";
 
 // mock kraken lib
 let stepCounter = 1;
+let volumeAmountTest = false;
 class KrakenMock implements IKraken {
     request<T>(method: PRIVATE_METHOD | PUBLIC_METHOD, params?: Record<string, string> | undefined): Promise<T> {
         try {
@@ -21,7 +22,7 @@ class KrakenMock implements IKraken {
             } else if (stepCounter === 2 && method === PRIVATE_METHOD.Withdraw) {
                 expect(params?.asset).toEqual("XXBT");
                 expect(params?.key).toEqual("My awesome Wallet");
-                expect(params?.amount).toEqual(20);
+                expect(params?.amount).toEqual(volumeAmountTest ? "10" : "20");
 
                 return <Promise<T>> <unknown> {
                     result: {
@@ -39,13 +40,20 @@ class KrakenMock implements IKraken {
 }
 
 
-if (!config.skipTests.includes("buy")) {
+if (!config.skipTests.includes("withdraw")) {
     beforeEach(async () => {
         stepCounter = 1;
+        volumeAmountTest = false;
     });
 
-    it("should successfully perform a withdraw workflow", async () => {
-        await withdraw(new KrakenMock());
+    it("should successfully withdraw the volume amount", async () => {
+        volumeAmountTest = true;
+        await withdraw(new KrakenMock(), 10);
+    });
+
+
+    it("should successfully withdraw the balance amount", async () => {
+        await withdraw(new KrakenMock(), 30);
     });
 } else {
     test("dummy", () => {

@@ -58,7 +58,8 @@ if (!config.skipTests.includes("buy")) {
     });
 
     it("should successfully perform a buy workflow", async () => {
-        await buy(new KrakenMock());
+        const volume = await buy(new KrakenMock());
+        expect(volume).toEqual(2);
     });
 } else {
     test("dummy", () => {

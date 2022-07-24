@@ -20,8 +20,9 @@ function main() {
     });
 
     let counter = 0;
+    let volume = 0;
     const task = schedule(EnvVars.CRON_BUY_SCHEDULE, async () => {
-        await buyAction(kraken);
+        volume += await buyAction(kraken);
         counter++;
     });
 
@@ -33,34 +34,37 @@ function main() {
 
                 if (EnvVars.ENABLE_WITHDRAWAL) {
                     await sleep(60); // wait until order is filled
-                    await withdrawAction(kraken);
+                    await withdrawAction(kraken, volume);
                 }
             }
         }, 1000);
     } else if (EnvVars.ENABLE_WITHDRAWAL) {
         schedule(EnvVars.CRON_WITHDRAW_SCHEDULE, async () => {
-            await withdrawAction(kraken);
+            await withdrawAction(kraken, volume);
+            volume = 0;
         });
     }
 
     logger.info("Asset Cost Average Bot started.");
 }
 
-async function buyAction(kraken: Kraken): Promise<void> {
+async function buyAction(kraken: Kraken): Promise<number> {
+    let volume = 0;
     try {
-        await buy(kraken);
+        volume = await buy(kraken);
     } catch (error) {
         logger.error((<Error> error).message);
     }
+    return volume;
 }
 
 async function sleep(seconds: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, seconds * 1000));
 }
 
-async function withdrawAction(kraken: Kraken): Promise<void> {
+async function withdrawAction(kraken: Kraken, volume: number): Promise<void> {
     try {
-        await withdraw(kraken);
+        await withdraw(kraken, volume);
     } catch (error) {
         logger.error((<Error> error).message);
     }

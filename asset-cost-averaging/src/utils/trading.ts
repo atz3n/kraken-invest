@@ -3,7 +3,7 @@ import { IKraken, PRIVATE_METHOD, PUBLIC_METHOD } from "../lib/Kraken";
 import { logger } from "./logging";
 
 
-export async function buy(kraken: IKraken): Promise<void> {
+export async function buy(kraken: IKraken): Promise<number> {
     const balances = await kraken.request<{ result: never }>(PRIVATE_METHOD.Balance);
     if (balances.result[EnvVars.QUOTE_SYMBOL] <= EnvVars.QUOTE_INVESTING_AMOUNT) {
         throw new Error("Not enough funds");
@@ -24,4 +24,6 @@ export async function buy(kraken: IKraken): Promise<void> {
 
     // eslint-disable-next-line max-len
     logger.info(`Set order ${order.result.txid[0]} to buy ${volume} ${EnvVars.BASE_SYMBOL} with ${EnvVars.QUOTE_SYMBOL}`);
+
+    return Number(volume);
 }
