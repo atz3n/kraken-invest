@@ -32,3 +32,18 @@ export class ConsoleTransport extends winston.transports.Console {
         });
     }
 }
+
+
+export class FileTransport extends winston.transports.File {
+    constructor() {
+        super({
+            dirname: "logs",
+            filename: "log.log",
+            maxsize: 2 * 1024 * 1024, // 2MB
+            format: format.combine(
+                format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+                format.printf(info => `${info.timestamp} ${info.level}: ${info.message}`)
+            )
+        });
+    }
+}

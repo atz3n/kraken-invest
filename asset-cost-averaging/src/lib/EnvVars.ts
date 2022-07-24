@@ -22,6 +22,7 @@ export class EnvVars {
     public static ENABLE_WITHDRAWAL = false;
     public static WITHDRAW_CRON_SCHEDULE = "";
     public static WITHDRAWAL_ADDRESS = "";
+    public static ENABLE_FILE_LOGGING = false;
 
 
     public static load(): void {
@@ -65,6 +66,9 @@ export class EnvVars {
         if (this.ENABLE_WITHDRAWAL && this.WITHDRAWAL_ADDRESS === "") {
             throw new Error("WITHDRAWAL_ADDRESS must be defined");
         }
+        this.setVar("ENABLE_FILE_LOGGING", (envVar) => {
+            this.ENABLE_FILE_LOGGING = this.Boolean(envVar);
+        }, false);
     }
 
     private static set_RUN_CONTEXT(): void {
