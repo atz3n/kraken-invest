@@ -10,7 +10,7 @@ interface Config {
         "API-Key": string,
         "API-Sign": string
     },
-        responseType: string
+    responseType: string
 }
 jest.mock("axios", () => {
     return {
