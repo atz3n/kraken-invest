@@ -45,7 +45,7 @@ function main() {
         });
     }
 
-    logger.info("Asset Cost Average Bot started.");
+    logger.info("Asset Cost Averaging Bot started.");
 }
 
 async function buyAction(kraken: Kraken): Promise<number> {
