@@ -2,6 +2,11 @@ name: build asset-cost-averaging image
 
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: Docker image version tag
+        required: false
+
   push:
     branches:
       - main
@@ -14,8 +19,8 @@ env:
   
   # docker config
   IMAGE_NAME: asset-cost-averaging
-  IMAGE_TAG: latest
   REGISTRY_NAME: ghcr.io/atz3n/kraken-invest
+  DEFAULT_IMAGE_TAG: latest
 
 jobs:
   test-project:
@@ -29,7 +34,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
+      
+      - name: Set image tag
+        run: |
+          if [ ${{ github.event.inputs.version }} == "" ]; then
+            echo "IMAGE_TAG=${{ env.DEFAULT_IMAGE_TAG }}" >> $GITHUB_ENV
+          else
+            echo "IMAGE_TAG=${{ github.event.inputs.version }}" >> $GITHUB_ENV
+          fi
+      
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       
