@@ -20,7 +20,7 @@ env:
   # docker config
   IMAGE_NAME: asset-cost-averaging
   REGISTRY_NAME: ghcr.io/atz3n/kraken-invest
-  DEFAULT_IMAGE_TAG: latest
+  LATEST_TAG: latest
 
 jobs:
   test-project:
@@ -35,12 +35,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       
-      - name: Set image tag
+      - name: Set image tags
         run: |
-          if [ "${{ github.event.inputs.version }}" == "" ]; then
-            echo "IMAGE_TAG=${{ env.DEFAULT_IMAGE_TAG }}" >> $GITHUB_ENV
-          else
-            echo "IMAGE_TAG=${{ github.event.inputs.version }}" >> $GITHUB_ENV
+          echo "IMAGE_TAG=${{ env.REGISTRY_NAME }}/${{ env.IMAGE_NAME }}:${{ env.LATEST_TAG }}" >> $GITHUB_ENV
+          if [ "${{ github.event.inputs.version }}" != "" ]; then
+            echo "RELEASE_IMAGE_TAG=${{ env.REGISTRY_NAME }}/${{ env.IMAGE_NAME }}:${{ github.event.inputs.version }}" >> $GITHUB_ENV
           fi
       
       - name: Set up QEMU
@@ -64,4 +63,5 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            ${{ env.REGISTRY_NAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+            ${{ env.IMAGE_TAG }}
+            ${{ env.RELEASE_IMAGE_TAG }}
