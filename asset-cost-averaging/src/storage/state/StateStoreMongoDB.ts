@@ -4,7 +4,7 @@ import { IStateStore, State } from "./IStateStore";
 
 
 export class StateStoreMongoDB extends AMongoDBStore implements IStateStore {
-    private readonly ID = "currentState";
+    public static readonly ID = "currentState";
 
 
     constructor(options: { mongoUrl: string }) {
@@ -22,7 +22,7 @@ export class StateStoreMongoDB extends AMongoDBStore implements IStateStore {
 
 
     public async upsert(state: State): Promise<void> {
-        state.id = this.ID;
+        state.id = StateStoreMongoDB.ID;
         await super.upsert({ pair: state.pair }, state);
     }
 
@@ -33,6 +33,6 @@ export class StateStoreMongoDB extends AMongoDBStore implements IStateStore {
 
 
     public async delete(): Promise<void> {
-        super.delete({ id: this.ID });
+        super.delete({ id: StateStoreMongoDB.ID });
     }
 }

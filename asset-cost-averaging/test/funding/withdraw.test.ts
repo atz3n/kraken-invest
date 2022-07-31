@@ -1,5 +1,8 @@
+import { initStateStore, withdrawAction } from "../../src/helpers";
 import { IKraken, PRIVATE_METHOD, PUBLIC_METHOD } from "../../src/lib/Kraken";
-import { withdraw } from "../../src/utils/funding";
+import { createStateStore } from "../../src/storage/state/stateStoreFactory";
+import { StateStoreInMemory } from "../../src/storage/state/StateStoreInMemory";
+import { StorageType } from "../../src/storage/StorageType";
 import { config } from "../config";
 
 
@@ -41,19 +44,30 @@ class KrakenMock implements IKraken {
 
 
 if (!config.skipTests.includes("withdraw")) {
+    let stateStore: StateStoreInMemory;
+
     beforeEach(async () => {
+        stateStore = <StateStoreInMemory> createStateStore(StorageType.IN_MEMORY);
+        await initStateStore(stateStore);
         stepCounter = 1;
         volumeAmountTest = false;
     });
 
+
     it("should successfully withdraw the volume amount", async () => {
         volumeAmountTest = true;
-        await withdraw(new KrakenMock(), 10);
+        stateStore.store[0].volume = 10;
+        await withdrawAction(new KrakenMock(), stateStore);
+
+        expect(stateStore.store[0].volume).toEqual(0);
     });
 
 
     it("should successfully withdraw the balance amount", async () => {
-        await withdraw(new KrakenMock(), 30);
+        stateStore.store[0].volume = 30;
+        await withdrawAction(new KrakenMock(), stateStore);
+
+        expect(stateStore.store[0].volume).toEqual(0);
     });
 } else {
     test("dummy", () => {

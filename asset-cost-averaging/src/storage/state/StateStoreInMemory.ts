@@ -3,12 +3,12 @@ import { IStateStore, State } from "./IStateStore";
 
 
 export class StateStoreInMemory extends AInMemoryStore implements IStateStore {
-    private readonly ID = "currentState";
+    public static readonly ID = "currentState";
     public store: State[] = [];
 
 
     public async upsert(state: State): Promise<void> {
-        state.id = this.ID;
+        state.id = StateStoreInMemory.ID;
         super.upsert(state, "id");
     }
 
@@ -19,6 +19,6 @@ export class StateStoreInMemory extends AInMemoryStore implements IStateStore {
 
 
     public async delete(): Promise<void> {
-        super.delete("id", this.ID);
+        super.delete("id", StateStoreInMemory.ID);
     }
 }

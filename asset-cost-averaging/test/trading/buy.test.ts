@@ -1,5 +1,8 @@
+import { buyAction, initStateStore } from "../../src/helpers";
 import { IKraken, PRIVATE_METHOD, PUBLIC_METHOD } from "../../src/lib/Kraken";
-import { buy } from "../../src/utils/trading";
+import { createStateStore } from "../../src/storage/state/stateStoreFactory";
+import { StateStoreInMemory } from "../../src/storage/state/StateStoreInMemory";
+import { StorageType } from "../../src/storage/StorageType";
 import { config } from "../config";
 
 
@@ -53,13 +56,20 @@ class KrakenMock implements IKraken {
 
 
 if (!config.skipTests.includes("buy")) {
+    let stateStore: StateStoreInMemory;
+
     beforeEach(async () => {
+        stateStore = <StateStoreInMemory> createStateStore(StorageType.IN_MEMORY);
+        await initStateStore(stateStore);
         stepCounter = 1;
     });
 
+
     it("should successfully perform a buy workflow", async () => {
-        const volume = await buy(new KrakenMock());
-        expect(volume).toEqual(2);
+        await buyAction(new KrakenMock(), stateStore);
+
+        expect(stateStore.store[0].volume).toEqual(2);
+        expect(stateStore.store[0].counter).toEqual(1);
     });
 } else {
     test("dummy", () => {

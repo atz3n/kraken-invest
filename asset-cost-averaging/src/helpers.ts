@@ -9,12 +9,12 @@ import { buy } from "./utils/trading";
 
 export async function initStateStore(stateStore: IStateStore): Promise<void> {
     const state = await stateStore.get();
-    const pair = `${EnvVars.BASE_SYMBOL}${EnvVars.QUOTE_INVESTING_AMOUNT}`;
+    const pair = `${EnvVars.BASE_SYMBOL}${EnvVars.QUOTE_SYMBOL}`;
 
     if (!state || state.pair !== pair || state.schedule !== EnvVars.CRON_BUY_SCHEDULE) {
         await stateStore.upsert({
             counter: 0,
-            pair: `${EnvVars.BASE_SYMBOL}${EnvVars.QUOTE_INVESTING_AMOUNT}`,
+            pair,
             schedule: EnvVars.CRON_BUY_SCHEDULE,
             volume: 0
         });
