@@ -11,7 +11,7 @@ export function createStateStore(type: StorageType): IStateStore {
             return createInMemoryStore();
         }
         case StorageType.MONGO_DB: {
-            return createMongoDbStore();
+            return createMongoDBStore();
         }
         default: {
             return createInMemoryStore();
@@ -23,6 +23,6 @@ function createInMemoryStore(): IStateStore {
     return new StateStoreInMemory();
 }
 
-function createMongoDbStore(): IStateStore {
+function createMongoDBStore(): IStateStore {
     return new StateStoreMongoDB({ mongoUrl: EnvVars.MONGO_DB_URL });
 }
