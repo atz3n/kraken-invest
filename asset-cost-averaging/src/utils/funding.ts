@@ -1,18 +1,25 @@
-import { EnvVars } from "../lib/EnvVars";
 import { IKraken, PRIVATE_METHOD } from "../lib/Kraken";
 import { logger } from "./logging";
 
 
-export async function withdraw(kraken: IKraken, volume: number): Promise<void> {
+interface WithdrawParams {
+    kraken: IKraken;
+    volume: number;
+    baseSymbol: string;
+    withdrawalAddress: string
+}
+
+export async function withdraw(params: WithdrawParams): Promise<void> {
+    const { kraken, volume, baseSymbol, withdrawalAddress } = params;
     const balances = await kraken.request<{ result: never }>(PRIVATE_METHOD.Balance);
-    const baseBalance = balances.result[EnvVars.BASE_SYMBOL];
+    const baseBalance = balances.result[baseSymbol];
     const withdrawAmount = Math.min(baseBalance, volume);
 
     const withdraw = await kraken.request<{ result: { refid: string }}>(PRIVATE_METHOD.Withdraw, {
-        asset: EnvVars.BASE_SYMBOL,
-        key: EnvVars.WITHDRAWAL_ADDRESS,
+        asset: baseSymbol,
+        key: withdrawalAddress,
         amount: "" + withdrawAmount
     });
 
-    logger.info(`Set withdrawal ${withdraw.result.refid} to withdraw ${baseBalance} ${EnvVars.BASE_SYMBOL}`);
+    logger.info(`Set withdrawal ${withdraw.result.refid} to withdraw ${baseBalance} ${baseSymbol}`);
 }

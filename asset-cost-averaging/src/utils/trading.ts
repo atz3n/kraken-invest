@@ -1,19 +1,28 @@
-import { EnvVars } from "../lib/EnvVars";
 import { IKraken, PRIVATE_METHOD, PUBLIC_METHOD } from "../lib/Kraken";
 import { logger } from "./logging";
 
 
-export async function buy(kraken: IKraken): Promise<number> {
+interface BuyParams {
+    kraken: IKraken;
+    quoteSymbol: string;
+    quoteInvestingAmount: number;
+    baseSymbol: string;
+    volumeDecimals: number;
+}
+
+export async function buy(params: BuyParams): Promise<number> {
+    const { kraken, quoteSymbol, quoteInvestingAmount, baseSymbol, volumeDecimals } = params;
+
     const balances = await kraken.request<{ result: never }>(PRIVATE_METHOD.Balance);
-    if (balances.result[EnvVars.QUOTE_SYMBOL] <= EnvVars.QUOTE_INVESTING_AMOUNT) {
+    if (balances.result[quoteSymbol] <= quoteInvestingAmount) {
         throw new Error("Not enough funds");
     }
 
-    const pair = `${EnvVars.BASE_SYMBOL}${EnvVars.QUOTE_SYMBOL}`;
+    const pair = `${baseSymbol}${quoteSymbol}`;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const price = await kraken.request<{ result: any }>(PUBLIC_METHOD.Ticker, { pair });
     const askPrice = price.result[pair].a[0];
-    const volume = (EnvVars.QUOTE_INVESTING_AMOUNT / askPrice).toFixed(EnvVars.VOLUME_DECIMAL);
+    const volume = (quoteInvestingAmount / askPrice).toFixed(volumeDecimals);
 
     const order = await kraken.request<{ result: { txid: string[] }}>(PRIVATE_METHOD.AddOrder, {
         ordertype: "market",
@@ -23,7 +32,7 @@ export async function buy(kraken: IKraken): Promise<number> {
     });
 
     // eslint-disable-next-line max-len
-    logger.info(`Set order ${order.result.txid[0]} to buy ${volume} ${EnvVars.BASE_SYMBOL} with ${EnvVars.QUOTE_SYMBOL}`);
+    logger.info(`Set order ${order.result.txid[0]} to buy ${volume} ${baseSymbol} with ${quoteSymbol}`);
 
     return Number(volume);
 }

@@ -1,6 +1,7 @@
 export type State = {
+    id?: string;
     pair: string;
-    isActive: boolean;
+    counter: number;
     volume: number;
     schedule: string;
 }
@@ -9,4 +10,5 @@ export type State = {
 export interface IStateStore {
     upsert(state: State): Promise<void>;
     get(): Promise<State | undefined>;
+    delete(): Promise<void>
 }
