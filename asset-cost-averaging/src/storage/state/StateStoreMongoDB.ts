@@ -33,6 +33,6 @@ export class StateStoreMongoDB extends AMongoDBStore implements IStateStore {
 
 
     public async delete(): Promise<void> {
-        super.delete({ id: StateStoreMongoDB.ID });
+        await super.delete({ id: StateStoreMongoDB.ID });
     }
 }
