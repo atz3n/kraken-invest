@@ -23,16 +23,16 @@ export class StateStoreMongoDB extends AMongoDBStore implements IStateStore {
 
     public async upsert(state: State): Promise<void> {
         state.id = StateStoreMongoDB.ID;
-        await super.upsert({ pair: state.pair }, state);
+        await this._upsert({ id: state.id }, state);
     }
 
 
     public async get(): Promise<State | undefined> {
-        return (await this.find<State>({}))[0];
+        return (await this._find<State>({}))[0];
     }
 
 
     public async delete(): Promise<void> {
-        await super.delete({ id: StateStoreMongoDB.ID });
+        await this._delete({ id: StateStoreMongoDB.ID });
     }
 }

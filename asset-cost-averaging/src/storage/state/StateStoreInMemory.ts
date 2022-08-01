@@ -9,7 +9,7 @@ export class StateStoreInMemory extends AInMemoryStore implements IStateStore {
 
     public async upsert(state: State): Promise<void> {
         state.id = StateStoreInMemory.ID;
-        super.upsert({ pair: state.pair }, state);
+        this._upsert({ id: state.id }, state);
     }
 
 
@@ -19,6 +19,6 @@ export class StateStoreInMemory extends AInMemoryStore implements IStateStore {
 
 
     public async delete(): Promise<void> {
-        super.delete({ id: StateStoreInMemory.ID });
+        this._delete({ id: StateStoreInMemory.ID });
     }
 }
