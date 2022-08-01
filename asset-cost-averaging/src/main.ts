@@ -1,5 +1,5 @@
 import { schedule } from "node-cron";
-import { buyAction, checkNumberOfBuysAndStopConditionally, initStateStore, withdrawAction } from "./helpers";
+import { buyConditionally, stopAndWithdrawConditionally, withdrawConditionally, initStateStore } from "./helpers";
 import { EnvVars } from "./lib/EnvVars";
 import { Kraken } from "./lib/Kraken";
 import { createStateStore } from "./storage/state/stateStoreFactory";
@@ -29,16 +29,16 @@ async function main() {
     });
 
     const task = schedule(EnvVars.CRON_BUY_SCHEDULE, async () => {
-        await buyAction(kraken, stateStore);
+        await buyConditionally(kraken, stateStore);
     });
 
     if (EnvVars.NUMBER_OF_BUYS > 0) {
         const interval = setInterval(() => {
-            checkNumberOfBuysAndStopConditionally(kraken, interval, task, stateStore);
+            stopAndWithdrawConditionally(kraken, interval, task, stateStore);
         }, 1000);
     } else if (EnvVars.ENABLE_WITHDRAWAL) {
         schedule(EnvVars.CRON_WITHDRAW_SCHEDULE, async () => {
-            await withdrawAction(kraken, stateStore);
+            await withdrawConditionally(kraken, stateStore);
         });
     }
 

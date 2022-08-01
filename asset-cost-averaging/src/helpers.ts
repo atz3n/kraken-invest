@@ -1,7 +1,7 @@
 import { ScheduledTask } from "node-cron";
 import { EnvVars } from "./lib/EnvVars";
 import { IKraken } from "./lib/Kraken";
-import { IStateStore } from "./storage/state/IStateStore";
+import { IStateStore, State } from "./storage/state/IStateStore";
 import { withdraw } from "./utils/funding";
 import { logger } from "./utils/logging";
 import { buy } from "./utils/trading";
@@ -22,26 +22,33 @@ export async function initStateStore(stateStore: IStateStore): Promise<void> {
 }
 
 
-export async function buyAction(kraken: IKraken, stateStore: IStateStore): Promise<void> {
+export async function buyConditionally(kraken: IKraken, stateStore: IStateStore): Promise<void> {
     try {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const state = (await stateStore.get())!;
-        state.volume += await buy({
-            kraken,
-            baseSymbol: EnvVars.BASE_SYMBOL,
-            quoteInvestingAmount: EnvVars.QUOTE_INVESTING_AMOUNT,
-            quoteSymbol: EnvVars.QUOTE_SYMBOL,
-            volumeDecimals: EnvVars.VOLUME_DECIMAL
-        });
-        state.counter++;
-        await stateStore.upsert(state);
+        let state = (await stateStore.get())!;
+        if (EnvVars.NUMBER_OF_BUYS <= 0 || state.counter < EnvVars.NUMBER_OF_BUYS) {
+            state = await buyAction(kraken, state);
+            await stateStore.upsert(state);
+        }
     } catch (error) {
         logger.error((<Error> error).message);
     }
 }
 
+async function buyAction(kraken: IKraken, state: State): Promise<State> {
+    state.volume += await buy({
+        kraken,
+        baseSymbol: EnvVars.BASE_SYMBOL,
+        quoteInvestingAmount: EnvVars.QUOTE_INVESTING_AMOUNT,
+        quoteSymbol: EnvVars.QUOTE_SYMBOL,
+        volumeDecimals: EnvVars.VOLUME_DECIMAL
+    });
+    state.counter++;
+    return state;
+}
 
-export async function checkNumberOfBuysAndStopConditionally(
+
+export async function stopAndWithdrawConditionally(
     kraken: IKraken,
     interval: NodeJS.Timeout,
     task: ScheduledTask,
@@ -56,7 +63,7 @@ export async function checkNumberOfBuysAndStopConditionally(
 
             if (EnvVars.ENABLE_WITHDRAWAL) {
                 await sleep(60); // wait until order is filled
-                await withdrawAction(kraken, stateStore);
+                await withdrawAction(kraken, state);
                 await stateStore.delete();
             }
         }
@@ -69,18 +76,23 @@ async function sleep(seconds: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, seconds * 1000));
 }
 
+async function withdrawAction(kraken: IKraken, state: State): Promise<State> {
+    await withdraw({
+        kraken,
+        volume: state.volume,
+        baseSymbol: EnvVars.BASE_SYMBOL,
+        withdrawalAddress: EnvVars.WITHDRAWAL_ADDRESS
+    });
+    state.volume = 0;
+    return state;
+}
 
-export async function withdrawAction(kraken: IKraken, stateStore: IStateStore): Promise<void> {
+
+export async function withdrawConditionally(kraken: IKraken, stateStore: IStateStore): Promise<void> {
     try {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const state = (await stateStore.get())!;
-        await withdraw({
-            kraken,
-            volume: state.volume,
-            baseSymbol: EnvVars.BASE_SYMBOL,
-            withdrawalAddress: EnvVars.WITHDRAWAL_ADDRESS
-        });
-        state.volume = 0;
+        let state = (await stateStore.get())!;
+        state = await withdrawAction(kraken, state);
         await stateStore.upsert(state);
     } catch (error) {
         logger.error((<Error> error).message);
