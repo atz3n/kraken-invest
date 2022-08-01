@@ -36,13 +36,14 @@ export async function buyConditionally(kraken: IKraken, stateStore: IStateStore)
 }
 
 async function buyAction(kraken: IKraken, state: State): Promise<State> {
-    state.volume += await buy({
+    const volume = await buy({
         kraken,
         baseSymbol: EnvVars.BASE_SYMBOL,
         quoteInvestingAmount: EnvVars.QUOTE_INVESTING_AMOUNT,
         quoteSymbol: EnvVars.QUOTE_SYMBOL,
         volumeDecimals: EnvVars.VOLUME_DECIMAL
     });
+    state.volume += volume;
     state.counter++;
     return state;
 }
