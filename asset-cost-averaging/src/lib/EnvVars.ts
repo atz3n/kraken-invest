@@ -24,6 +24,7 @@ export class EnvVars {
     public static CRON_WITHDRAW_SCHEDULE = "";
     public static WITHDRAWAL_ADDRESS = "";
     public static ENABLE_FILE_LOGGING = false;
+    public static MONGO_DB_URL = "";
 
 
     public static load(): void {
@@ -73,6 +74,9 @@ export class EnvVars {
         this.setVar("ENABLE_FILE_LOGGING", (envVar) => {
             this.ENABLE_FILE_LOGGING = this.Boolean(envVar);
         }, false);
+        this.setVar("MONGO_DB_URL", (envVar) => {
+            this.MONGO_DB_URL = String(envVar);
+        }, "");
     }
 
     private static set_RUN_CONTEXT(): void {

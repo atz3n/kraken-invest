@@ -1,5 +1,9 @@
+import { buyConditionally, initStateStore } from "../../src/helpers";
+import { EnvVars } from "../../src/lib/EnvVars";
 import { IKraken, PRIVATE_METHOD, PUBLIC_METHOD } from "../../src/lib/Kraken";
-import { buy } from "../../src/utils/trading";
+import { createStateStore } from "../../src/storage/state/stateStoreFactory";
+import { StateStoreInMemory } from "../../src/storage/state/StateStoreInMemory";
+import { StorageType } from "../../src/storage/StorageType";
 import { config } from "../config";
 
 
@@ -53,13 +57,30 @@ class KrakenMock implements IKraken {
 
 
 if (!config.skipTests.includes("buy")) {
+    let stateStore: StateStoreInMemory;
+
     beforeEach(async () => {
+        stateStore = <StateStoreInMemory> createStateStore(StorageType.IN_MEMORY);
+        await initStateStore(stateStore);
         stepCounter = 1;
+        EnvVars.NUMBER_OF_BUYS = 0;
     });
 
-    it("should successfully perform a buy workflow", async () => {
-        const volume = await buy(new KrakenMock());
-        expect(volume).toEqual(2);
+
+    it("should successfully buy", async () => {
+        await buyConditionally(new KrakenMock(), stateStore);
+
+        expect(stateStore.store[0].volume).toEqual(2);
+        expect(stateStore.store[0].counter).toEqual(1);
+    });
+
+
+    it("should not buy in case the counter exceeded the number of buys", async () => {
+        EnvVars.NUMBER_OF_BUYS = 2;
+        stateStore.store[0].counter = 3;
+        await buyConditionally(new KrakenMock(), stateStore);
+
+        expect(stepCounter).toEqual(1);
     });
 } else {
     test("dummy", () => {

@@ -1,12 +1,13 @@
 import { schedule } from "node-cron";
+import { buyConditionally, stopAndWithdrawConditionally, withdrawConditionally, initStateStore } from "./helpers";
 import { EnvVars } from "./lib/EnvVars";
 import { Kraken } from "./lib/Kraken";
-import { withdraw } from "./utils/funding";
+import { createStateStore } from "./storage/state/stateStoreFactory";
+import { StorageType } from "./storage/StorageType";
 import { ConsoleTransport, FileTransport, initLogger, logger } from "./utils/logging";
-import { buy } from "./utils/trading";
 
 
-function main() {
+async function main() {
     initLogger({
         level: "info",
         transports: EnvVars.ENABLE_FILE_LOGGING
@@ -14,60 +15,34 @@ function main() {
             : [ new ConsoleTransport() ]
     });
 
+    logger.info("Init database...");
+    const stateStore = createStateStore(EnvVars.MONGO_DB_URL
+        ? StorageType.MONGO_DB
+        : StorageType.IN_MEMORY
+    );
+    await initStateStore(stateStore);
+
+    logger.info("Init schedules...");
     const kraken = new Kraken({
         apiKeySecret: EnvVars.KRAKEN_PRIVATE_KEY,
         apiKeyId: EnvVars.KRAKEN_API_KEY
     });
 
-    let counter = 0;
-    let volume = 0;
     const task = schedule(EnvVars.CRON_BUY_SCHEDULE, async () => {
-        volume += await buyAction(kraken);
-        counter++;
+        await buyConditionally(kraken, stateStore);
     });
 
     if (EnvVars.NUMBER_OF_BUYS > 0) {
-        const interval = setInterval(async () => {
-            if (counter >= EnvVars.NUMBER_OF_BUYS) {
-                task.stop();
-                clearInterval(interval);
-
-                if (EnvVars.ENABLE_WITHDRAWAL) {
-                    await sleep(60); // wait until order is filled
-                    await withdrawAction(kraken, volume);
-                }
-            }
+        const interval = setInterval(() => {
+            stopAndWithdrawConditionally(kraken, interval, task, stateStore);
         }, 1000);
     } else if (EnvVars.ENABLE_WITHDRAWAL) {
         schedule(EnvVars.CRON_WITHDRAW_SCHEDULE, async () => {
-            await withdrawAction(kraken, volume);
-            volume = 0;
+            await withdrawConditionally(kraken, stateStore);
         });
     }
 
-    logger.info("Asset Cost Averaging Bot started.");
-}
-
-async function buyAction(kraken: Kraken): Promise<number> {
-    let volume = 0;
-    try {
-        volume = await buy(kraken);
-    } catch (error) {
-        logger.error((<Error> error).message);
-    }
-    return volume;
-}
-
-async function sleep(seconds: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, seconds * 1000));
-}
-
-async function withdrawAction(kraken: Kraken, volume: number): Promise<void> {
-    try {
-        await withdraw(kraken, volume);
-    } catch (error) {
-        logger.error((<Error> error).message);
-    }
+    logger.info("Done. Asset Cost Averaging Bot started.");
 }
 
 
