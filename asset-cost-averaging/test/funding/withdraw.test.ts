@@ -1,4 +1,4 @@
-import { initStateStore, withdrawAction } from "../../src/helpers";
+import { initStateStore, withdrawConditionally } from "../../src/helpers";
 import { IKraken, PRIVATE_METHOD, PUBLIC_METHOD } from "../../src/lib/Kraken";
 import { createStateStore } from "../../src/storage/state/stateStoreFactory";
 import { StateStoreInMemory } from "../../src/storage/state/StateStoreInMemory";
@@ -57,7 +57,7 @@ if (!config.skipTests.includes("withdraw")) {
     it("should successfully withdraw the volume amount", async () => {
         volumeAmountTest = true;
         stateStore.store[0].volume = 10;
-        await withdrawAction(new KrakenMock(), stateStore);
+        await withdrawConditionally(new KrakenMock(), stateStore);
 
         expect(stateStore.store[0].volume).toEqual(0);
     });
@@ -65,9 +65,17 @@ if (!config.skipTests.includes("withdraw")) {
 
     it("should successfully withdraw the balance amount", async () => {
         stateStore.store[0].volume = 30;
-        await withdrawAction(new KrakenMock(), stateStore);
+        await withdrawConditionally(new KrakenMock(), stateStore);
 
         expect(stateStore.store[0].volume).toEqual(0);
+    });
+
+
+    it("should not withdraw the balance amount in case the volume is 0", async () => {
+        stateStore.store[0].volume = 0;
+        await withdrawConditionally(new KrakenMock(), stateStore);
+
+        expect(stepCounter).toEqual(1);
     });
 } else {
     test("dummy", () => {

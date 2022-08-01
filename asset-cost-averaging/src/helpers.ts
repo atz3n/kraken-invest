@@ -62,7 +62,7 @@ export async function stopAndWithdrawConditionally(
             task.stop();
             clearInterval(interval);
 
-            if (EnvVars.ENABLE_WITHDRAWAL) {
+            if (EnvVars.ENABLE_WITHDRAWAL && state.volume > 0) {
                 await sleep(60); // wait until order is filled
                 await withdrawAction(kraken, state);
                 await stateStore.delete();
@@ -93,8 +93,10 @@ export async function withdrawConditionally(kraken: IKraken, stateStore: IStateS
     try {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         let state = (await stateStore.get())!;
-        state = await withdrawAction(kraken, state);
-        await stateStore.upsert(state);
+        if (state.volume > 0) {
+            state = await withdrawAction(kraken, state);
+            await stateStore.upsert(state);
+        }
     } catch (error) {
         logger.error((<Error> error).message);
     }
