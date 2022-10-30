@@ -1,7 +1,7 @@
 import { schedule } from "node-cron";
 import { buyConditionally, stopAndWithdrawConditionally, withdrawConditionally, initStateStore } from "./helpers";
 import { EnvVars } from "./lib/EnvVars";
-import { Kraken } from "./lib/Kraken";
+import { Kraken } from "lib";
 import { createStateStore } from "./storage/state/stateStoreFactory";
 import { StorageType } from "./storage/StorageType";
 import { ConsoleTransport, FileTransport, initLogger, logger } from "./utils/logging";

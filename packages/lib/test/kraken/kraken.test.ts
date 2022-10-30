@@ -1,7 +1,7 @@
-import { EnvVars } from "../../src/lib/EnvVars";
-import { Kraken, PRIVATE_METHOD, PUBLIC_METHOD } from "../../src/lib/Kraken";
+import { Kraken, PRIVATE_METHOD, PUBLIC_METHOD } from "../../src/kraken/Kraken";
 import { config } from "../config";
 import crypto from "crypto";
+import { KRAKEN_API_KEY, KRAKEN_PRIVATE_KEY } from "../data";
 
 
 // mock axios
@@ -52,8 +52,8 @@ jest.mock("axios", () => {
                 expect(volumeArray[1]).toContain("0.1");
 
                 expect(config.responseType).toEqual("arraybuffer");
-                expect(config.headers["API-Key"]).toEqual(EnvVars.KRAKEN_API_KEY);
-                expect(config.headers["API-Sign"]).toEqual(createSignature(nonceArray[1], EnvVars.KRAKEN_PRIVATE_KEY));
+                expect(config.headers["API-Key"]).toEqual(KRAKEN_API_KEY);
+                expect(config.headers["API-Sign"]).toEqual(createSignature(nonceArray[1], KRAKEN_PRIVATE_KEY));
 
                 return {
                     data: JSON.stringify({
@@ -93,8 +93,8 @@ if (!config.skipTests.includes("kraken")) {
 
     it("should send a private method as a signed POST request", async () => {
         const kraken = new Kraken({
-            apiKeyId: EnvVars.KRAKEN_API_KEY,
-            apiKeySecret: EnvVars.KRAKEN_PRIVATE_KEY
+            apiKeyId: KRAKEN_API_KEY,
+            apiKeySecret: KRAKEN_PRIVATE_KEY
         });
         const response = await kraken.request<{result: { txid: string[] }}>(PRIVATE_METHOD.AddOrder, {
             ordertype: "market",

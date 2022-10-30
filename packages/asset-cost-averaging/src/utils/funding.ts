@@ -1,4 +1,4 @@
-import { IKraken, PRIVATE_METHOD } from "../lib/Kraken";
+import { IKraken, PRIVATE_METHOD } from "lib";
 import { logger } from "./logging";
 
 

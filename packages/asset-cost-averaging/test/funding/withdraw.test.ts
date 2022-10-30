@@ -1,5 +1,5 @@
 import { initStateStore, withdrawConditionally } from "../../src/helpers";
-import { IKraken, PRIVATE_METHOD, PUBLIC_METHOD } from "../../src/lib/Kraken";
+import { IKraken, PRIVATE_METHOD, PUBLIC_METHOD } from "lib";
 import { createStateStore } from "../../src/storage/state/stateStoreFactory";
 import { StateStoreInMemory } from "../../src/storage/state/StateStoreInMemory";
 import { StorageType } from "../../src/storage/StorageType";
