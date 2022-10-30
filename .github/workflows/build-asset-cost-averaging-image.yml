@@ -14,7 +14,7 @@ on:
 
 jobs:
   test-asset-cost-averaging:
-    uses: ./.github/workflows/lib/test-project.yml
+    uses: ./.github/workflows/test-project.yml
     secrets: inherit
     with:
       project_dir: packages/asset-cost-averaging
@@ -22,7 +22,7 @@ jobs:
   build-asset-cost-averaging:
     needs:
       - test-asset-cost-averaging
-    uses: ./.github/workflows/lib/build-image.yml
+    uses: ./.github/workflows/build-image.yml
     secrets: inherit
     with:
       project_dir: packages/asset-cost-averaging

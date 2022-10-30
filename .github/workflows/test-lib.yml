@@ -10,7 +10,7 @@ on:
 
 jobs:
   test-lib:
-    uses: ./.github/workflows/lib/test-project.yml
+    uses: ./.github/workflows/test-project.yml
     secrets: inherit
     with:
       project_dir: packages/lib
