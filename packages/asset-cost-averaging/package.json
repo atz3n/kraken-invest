@@ -4,12 +4,13 @@
     "license": "ISC",
     "main": "main.js",
     "scripts": {
-        "dev": "RUN_CONTEXT=development yarn dev:cmd",
-        "dev:cmd": "ts-node-dev --cache-directory ./dev ./src/main",
+        "dev": "RUN_CONTEXT=development ts-node-dev --cache-directory ./dev ./src/main",
+        "build:lib": "cd ../lib && yarn build && cd ../asset-cost-averaging && yarn install:clean",
         "lint": "eslint ./ --ext .ts",
         "lint:fix": "eslint ./ --fix --ext .ts",
-        "test": "RUN_CONTEXT=test jest --testEnvironment=node --verbose",
-        "build": "rm -rf ./dist && tsc",
+        "test": "yarn build:lib && RUN_CONTEXT=test jest --testEnvironment=node --verbose",
+        "build": "yarn build:lib && rm -rf ./dist && tsc --skipLibCheck",
+        "install:clean": "rm -rf ./node_modules && yarn",
         "start": "node ./dist/src/main.js"
     },
     "devDependencies": {
@@ -31,7 +32,6 @@
         "lib": "../lib",
         "mongoose": "^6.5.0",
         "node-cron": "^3.0.1",
-        "uuid": "^8.3.2",
-        "winston": "^3.8.1"
+        "uuid": "^8.3.2"
     }
 }

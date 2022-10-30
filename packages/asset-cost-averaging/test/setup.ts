@@ -1,4 +1,4 @@
-import { DummyTransport, initLogger } from "../src/utils/logging";
+import { DummyTransport, initLogger } from "lib";
 
 
 initLogger({

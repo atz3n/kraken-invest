@@ -4,7 +4,7 @@ import { EnvVars } from "./lib/EnvVars";
 import { Kraken } from "lib";
 import { createStateStore } from "./storage/state/stateStoreFactory";
 import { StorageType } from "./storage/StorageType";
-import { ConsoleTransport, FileTransport, initLogger, logger } from "./utils/logging";
+import { ConsoleTransport, FileTransport, initLogger, logger } from "lib";
 
 
 async function main() {

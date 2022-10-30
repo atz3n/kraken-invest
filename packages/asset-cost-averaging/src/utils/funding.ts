@@ -1,5 +1,5 @@
 import { IKraken, PRIVATE_METHOD } from "lib";
-import { logger } from "./logging";
+import { logger } from "lib";
 
 
 interface WithdrawParams {
