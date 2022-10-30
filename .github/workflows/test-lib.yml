@@ -1,4 +1,4 @@
-name: test asset-cost-averaging project
+name: test lib project
 
 on:
   workflow_dispatch:
@@ -6,11 +6,11 @@ on:
     branches:
       - main
     paths:
-      - packages/asset-cost-averaging/**
+      - packages/lib/**
 
 jobs:
-  test-asset-cost-averaging:
+  test-lib:
     uses: ./.github/workflows/lib/test-project.yml
     secrets: inherit
     with:
-      project_dir: packages/asset-cost-averaging
+      project_dir: packages/lib

@@ -1,0 +1,31 @@
+name: build asset-cost-averaging image
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Docker image version tag
+        required: false
+  push:
+    branches:
+      - main
+    paths:
+      - packages/asset-cost-averaging/**
+
+jobs:
+  test-asset-cost-averaging:
+    uses: ./.github/workflows/lib/test-project.yml
+    secrets: inherit
+    with:
+      project_dir: packages/asset-cost-averaging
+
+  build-asset-cost-averaging:
+    needs:
+      - test-asset-cost-averaging
+    uses: ./.github/workflows/lib/build-image.yml
+    secrets: inherit
+    with:
+      project_dir: packages/asset-cost-averaging
+      registry_name: ghcr.io/atz3n/kraken-invest
+      image_name: asset-cost-averaging
+      version: ${{ github.event.inputs.version }}
