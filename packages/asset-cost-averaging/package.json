@@ -9,7 +9,7 @@
         "lint:fix": "eslint ./ --fix --ext .ts",
         "test": "RUN_CONTEXT=test jest",
         "test:coverage": "yarn test --coverage",
-        "build": "rm -rf ./dist && tsc --skipLibCheck",
+        "build": "rm -rf ./dist && tsc",
         "start": "node ./dist/src/main.js"
     },
     "devDependencies": {
