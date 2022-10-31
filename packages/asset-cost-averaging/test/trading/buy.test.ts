@@ -1,6 +1,6 @@
+import { IKraken, KRAKEN_PRIVATE_METHOD, KRAKEN_PUBLIC_METHOD } from "@atz3n/kraken-invest-lib";
 import { buyConditionally, initStateStore } from "../../src/helpers";
 import { EnvVars } from "../../src/lib/EnvVars";
-import { IKraken, PRIVATE_METHOD, PUBLIC_METHOD } from "lib";
 import { createStateStore } from "../../src/storage/state/stateStoreFactory";
 import { StateStoreInMemory } from "../../src/storage/state/StateStoreInMemory";
 import { StorageType } from "../../src/storage/StorageType";
@@ -10,10 +10,13 @@ import { config } from "../config";
 // mock kraken lib
 let stepCounter = 1;
 class KrakenMock implements IKraken {
-    request<T>(method: PRIVATE_METHOD | PUBLIC_METHOD, params?: Record<string, string> | undefined): Promise<T> {
+    request<T>(
+        method: KRAKEN_PRIVATE_METHOD | KRAKEN_PUBLIC_METHOD,
+        params?: Record<string, string> | undefined
+    ): Promise<T> {
         try {
             // 1. check balance of quote asset
-            if (stepCounter === 1 && method === PRIVATE_METHOD.Balance) {
+            if (stepCounter === 1 && method === KRAKEN_PRIVATE_METHOD.Balance) {
                 stepCounter++;
 
                 return <Promise<T>> <unknown> {
@@ -22,7 +25,7 @@ class KrakenMock implements IKraken {
                     }
                 };
             // 2. get price
-            } else if (stepCounter === 2 && method === PUBLIC_METHOD.Ticker) {
+            } else if (stepCounter === 2 && method === KRAKEN_PUBLIC_METHOD.Ticker) {
                 stepCounter++;
                 expect(params?.pair).toEqual("XXBTZEUR");
 
@@ -34,7 +37,7 @@ class KrakenMock implements IKraken {
                     }
                 };
             // 3. set order
-            } else if (stepCounter === 3 && method === PRIVATE_METHOD.AddOrder) {
+            } else if (stepCounter === 3 && method === KRAKEN_PRIVATE_METHOD.AddOrder) {
                 expect(params?.ordertype).toEqual("market");
                 expect(params?.type).toEqual("buy");
                 expect(params?.pair).toEqual("XXBTZEUR");

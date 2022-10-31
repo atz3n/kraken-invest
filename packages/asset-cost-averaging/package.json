@@ -5,12 +5,10 @@
     "main": "main.js",
     "scripts": {
         "dev": "RUN_CONTEXT=development ts-node-dev --cache-directory ./dev ./src/main",
-        "build:lib": "cd ../lib && yarn build && cd ../asset-cost-averaging && yarn install:clean",
         "lint": "eslint ./ --ext .ts",
         "lint:fix": "eslint ./ --fix --ext .ts",
-        "test": "yarn build:lib && RUN_CONTEXT=test jest --testEnvironment=node --verbose",
-        "build": "yarn build:lib && rm -rf ./dist && tsc --skipLibCheck",
-        "install:clean": "rm -rf ./node_modules && yarn",
+        "test": "RUN_CONTEXT=test jest --testEnvironment=node --verbose",
+        "build": "rm -rf ./dist && tsc --skipLibCheck",
         "start": "node ./dist/src/main.js"
     },
     "devDependencies": {
@@ -28,8 +26,8 @@
         "typescript": "4.6.4"
     },
     "dependencies": {
+        "@atz3n/kraken-invest-lib": "1.3.2",
         "dotenv": "^10.0.0",
-        "lib": "../lib",
         "mongoose": "^6.5.0",
         "node-cron": "^3.0.1",
         "uuid": "^8.3.2"

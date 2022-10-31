@@ -1,4 +1,4 @@
-import { DummyTransport, initLogger } from "lib";
+import { DummyTransport, initLogger } from "@atz3n/kraken-invest-lib";
 
 
 initLogger({

@@ -1,5 +1,4 @@
-import { IKraken, PRIVATE_METHOD } from "lib";
-import { logger } from "lib";
+import { IKraken, KRAKEN_PRIVATE_METHOD, logger } from "@atz3n/kraken-invest-lib";
 
 
 interface WithdrawParams {
@@ -11,11 +10,11 @@ interface WithdrawParams {
 
 export async function withdraw(params: WithdrawParams): Promise<void> {
     const { kraken, volume, baseSymbol, withdrawalAddress } = params;
-    const balances = await kraken.request<{ result: never }>(PRIVATE_METHOD.Balance);
+    const balances = await kraken.request<{ result: never }>(KRAKEN_PRIVATE_METHOD.Balance);
     const baseBalance = balances.result[baseSymbol];
     const withdrawAmount = Math.min(baseBalance, volume);
 
-    const withdraw = await kraken.request<{ result: { refid: string }}>(PRIVATE_METHOD.Withdraw, {
+    const withdraw = await kraken.request<{ result: { refid: string }}>(KRAKEN_PRIVATE_METHOD.Withdraw, {
         asset: baseSymbol,
         key: withdrawalAddress,
         amount: "" + withdrawAmount

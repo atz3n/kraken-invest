@@ -1,9 +1,8 @@
+import { IKraken, logger } from "@atz3n/kraken-invest-lib";
 import { ScheduledTask } from "node-cron";
 import { EnvVars } from "./lib/EnvVars";
-import { IKraken } from "lib";
 import { IStateStore, State } from "./storage/state/IStateStore";
 import { withdraw } from "./utils/funding";
-import { logger } from "lib";
 import { buy } from "./utils/trading";
 
 

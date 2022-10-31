@@ -1,5 +1,5 @@
+import { IKraken, KRAKEN_PRIVATE_METHOD, KRAKEN_PUBLIC_METHOD } from "@atz3n/kraken-invest-lib";
 import { initStateStore, withdrawConditionally } from "../../src/helpers";
-import { IKraken, PRIVATE_METHOD, PUBLIC_METHOD } from "lib";
 import { createStateStore } from "../../src/storage/state/stateStoreFactory";
 import { StateStoreInMemory } from "../../src/storage/state/StateStoreInMemory";
 import { StorageType } from "../../src/storage/StorageType";
@@ -10,10 +10,13 @@ import { config } from "../config";
 let stepCounter = 1;
 let volumeAmountTest = false;
 class KrakenMock implements IKraken {
-    request<T>(method: PRIVATE_METHOD | PUBLIC_METHOD, params?: Record<string, string> | undefined): Promise<T> {
+    request<T>(
+        method: KRAKEN_PRIVATE_METHOD | KRAKEN_PUBLIC_METHOD,
+        params?: Record<string, string> | undefined
+    ): Promise<T> {
         try {
             // 1. check balance of base asset
-            if (stepCounter === 1 && method === PRIVATE_METHOD.Balance) {
+            if (stepCounter === 1 && method === KRAKEN_PRIVATE_METHOD.Balance) {
                 stepCounter++;
 
                 return <Promise<T>> <unknown> {
@@ -22,7 +25,7 @@ class KrakenMock implements IKraken {
                     }
                 };
             // 2. withdraw base asset
-            } else if (stepCounter === 2 && method === PRIVATE_METHOD.Withdraw) {
+            } else if (stepCounter === 2 && method === KRAKEN_PRIVATE_METHOD.Withdraw) {
                 expect(params?.asset).toEqual("XXBT");
                 expect(params?.key).toEqual("My awesome Wallet");
                 expect(params?.amount).toEqual(volumeAmountTest ? "10" : "20");
