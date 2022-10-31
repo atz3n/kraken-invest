@@ -9,8 +9,9 @@ export let logger = <winston.Logger> {};
 export function initLogger(options: winston.LoggerOptions): void {
     options.levels = {
         error: 0,
-        info: 1,
-        debug: 2
+        warn: 1,
+        info: 2,
+        debug: 3
     };
     logger = winston.createLogger(options);
 }
