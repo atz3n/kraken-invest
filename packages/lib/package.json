@@ -1,6 +1,6 @@
 {
     "name": "@atz3n/kraken-invest-lib",
-    "version": "1.3.1",
+    "version": "1.3.2",
     "description": "A utilities library for kraken investing bots",
     "author": "atz3n",
     "license": "MIT",
@@ -11,7 +11,7 @@
     "main": "dist/src/index.js",
     "types": "dist/src/index.d.ts",
     "files": [
-        "*"
+        "dist/src/**/*"
     ],
     "scripts": {
         "build": "rm -rf ./dist && tsc",
