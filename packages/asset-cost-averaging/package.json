@@ -1,13 +1,14 @@
 {
     "name": "asset-cost-averaging",
     "version": "1.0.0",
-    "license": "ISC",
+    "license": "MIT",
     "main": "main.js",
     "scripts": {
         "dev": "RUN_CONTEXT=development ts-node-dev --cache-directory ./dev ./src/main",
         "lint": "eslint ./ --ext .ts",
         "lint:fix": "eslint ./ --fix --ext .ts",
-        "test": "RUN_CONTEXT=test jest --testEnvironment=node --verbose",
+        "test": "RUN_CONTEXT=test jest",
+        "test:coverage": "yarn test --coverage",
         "build": "rm -rf ./dist && tsc --skipLibCheck",
         "start": "node ./dist/src/main.js"
     },

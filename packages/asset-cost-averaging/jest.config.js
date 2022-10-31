@@ -1,4 +1,6 @@
 module.exports = {
+    testEnvironment: "node",
+    verbose: true,
     roots: [
         "<rootDir>/test"
     ],
@@ -13,5 +15,5 @@ module.exports = {
     collectCoverageFrom: [
         "src/**/*.ts",
     ],
-    coverageDirectory: "coverage"
+    coverageDirectory: "coverage",
 };
