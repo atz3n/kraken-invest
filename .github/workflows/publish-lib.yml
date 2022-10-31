@@ -50,10 +50,9 @@ jobs:
       - name: Create and publish package
         run: |
           if [ "${{ inputs.version }}" != "" ]; then
-            yarn publish --access public --minor
+            yarn publish --non-interactive --access public --minor
           else
-            yarn publish --access public --new-version {{ inputs.version }}
+            yarn publish --non-interactive --access public --new-version {{ inputs.version }}
           fi
-
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

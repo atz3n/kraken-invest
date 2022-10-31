@@ -5,8 +5,8 @@
     "author": "atz3n",
     "license": "MIT",
     "repository": {
-      "type": "git",
-      "url": "https://github.com/atz3n/kraken-invest"
+        "type": "git",
+        "url": "https://github.com/atz3n/kraken-invest"
     },
     "main": "dist/src/index.js",
     "scripts": {
