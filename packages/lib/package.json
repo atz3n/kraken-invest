@@ -8,11 +8,9 @@
         "type": "git",
         "url": "https://github.com/atz3n/kraken-invest"
     },
+    "files": [ "dist/src/**/*" ],
     "main": "dist/src/index.js",
     "types": "dist/src/index.d.ts",
-    "files": [
-        "dist/src/**/*"
-    ],
     "scripts": {
         "build": "rm -rf ./dist && tsc",
         "test": "jest",

@@ -29,18 +29,6 @@ jobs:
           node-version: 16
           registry-url: https://registry.npmjs.org
         
-      - name: Get package version
-        run: echo "VERSION=$(echo ${GITHUB_REF:10})" >> $GITHUB_ENV
-      
-      # - name: Set package version
-      #   run: |
-      #     if [ "${{ inputs.version }}" != "" ]; then
-      #       echo "RELEASE_IMAGE_TAG=${{ inputs.registry_name }}/${{ inputs.image_name }}:${{ inputs.version }}" >> $GITHUB_ENV
-      #     fi
-
-      # - name: Set up package version
-      #   run: npm --no-git-tag-version --allow-same-version version $RELEASE_VERSION
-   
       - name: Install dependencies
         run: yarn install
 
