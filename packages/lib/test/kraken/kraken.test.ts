@@ -1,4 +1,4 @@
-import { Kraken, PRIVATE_METHOD, PUBLIC_METHOD } from "../../src/kraken/Kraken";
+import { Kraken, KRAKEN_PRIVATE_METHOD, KRAKEN_PUBLIC_METHOD } from "../../src/kraken/Kraken";
 import { config } from "../config";
 import crypto from "crypto";
 import { KRAKEN_API_KEY, KRAKEN_PRIVATE_KEY } from "../data";
@@ -86,7 +86,7 @@ function createSignature(nonce: string, krakenSecret: string) {
 if (!config.skipTests.includes("kraken")) {
     it("should send a public method as GET request", async () => {
         const kraken = new Kraken();
-        const response = await kraken.request<{result: { some: string }}>(PUBLIC_METHOD.Time);
+        const response = await kraken.request<{result: { some: string }}>(KRAKEN_PUBLIC_METHOD.Time);
         expect(response.result.some).toEqual("data");
     });
 
@@ -96,7 +96,7 @@ if (!config.skipTests.includes("kraken")) {
             apiKeyId: KRAKEN_API_KEY,
             apiKeySecret: KRAKEN_PRIVATE_KEY
         });
-        const response = await kraken.request<{result: { txid: string[] }}>(PRIVATE_METHOD.AddOrder, {
+        const response = await kraken.request<{result: { txid: string[] }}>(KRAKEN_PRIVATE_METHOD.AddOrder, {
             ordertype: "market",
             type: "buy",
             pair: "XXBTZEUR",

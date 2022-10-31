@@ -2,7 +2,7 @@ import axios from "axios";
 import crypto from "crypto";
 
 
-export enum PRIVATE_METHOD {
+export enum KRAKEN_PRIVATE_METHOD {
     Balance = "Balance",
     BalanceEx = "BalanceEx",
     TradeBalance = "TradeBalance",
@@ -41,7 +41,7 @@ export enum PRIVATE_METHOD {
     StakingTransactions = "Staking/Transactions"
 }
 
-export enum PUBLIC_METHOD {
+export enum KRAKEN_PUBLIC_METHOD {
     Time = "Time",
     Assets = "Assets",
     AssetPairs = "AssetPairs",
@@ -55,7 +55,7 @@ export enum PUBLIC_METHOD {
 
 
 export interface IKraken {
-    request<T>(method: PRIVATE_METHOD | PUBLIC_METHOD, params?: Record<string, string>): Promise<T>
+    request<T>(method: KRAKEN_PRIVATE_METHOD | KRAKEN_PUBLIC_METHOD, params?: Record<string, string>): Promise<T>
 }
 
 
@@ -80,7 +80,10 @@ export class Kraken implements IKraken {
     }
 
 
-    public async request<T>(method: PRIVATE_METHOD | PUBLIC_METHOD, params?: Record<string, string>): Promise<T> {
+    public async request<T>(
+        method: KRAKEN_PRIVATE_METHOD | KRAKEN_PUBLIC_METHOD,
+        params?: Record<string, string>
+    ): Promise<T> {
         let response = <{error: []}> {};
         let paramsString = "";
 
@@ -91,11 +94,11 @@ export class Kraken implements IKraken {
             paramsString = paramsString.slice(0, -1);
         }
 
-        if (Object.values(PRIVATE_METHOD).includes(<PRIVATE_METHOD> method)) {
-            response = <{error: []}> await this.queryPrivateEndpoint(<PRIVATE_METHOD> method, paramsString);
+        if (Object.values(KRAKEN_PRIVATE_METHOD).includes(<KRAKEN_PRIVATE_METHOD> method)) {
+            response = <{error: []}> await this.queryPrivateEndpoint(<KRAKEN_PRIVATE_METHOD> method, paramsString);
         }
-        if (Object.values(PUBLIC_METHOD).includes(<PUBLIC_METHOD> method)) {
-            response = <{error: []}> await this.queryPublicEndpoint(<PUBLIC_METHOD> method, paramsString);
+        if (Object.values(KRAKEN_PUBLIC_METHOD).includes(<KRAKEN_PUBLIC_METHOD> method)) {
+            response = <{error: []}> await this.queryPublicEndpoint(<KRAKEN_PUBLIC_METHOD> method, paramsString);
         }
 
         if (response.error.length > 0) {
@@ -105,13 +108,13 @@ export class Kraken implements IKraken {
         return <T> <unknown> response;
     }
 
-    private async queryPublicEndpoint(apiMethod: PUBLIC_METHOD, inputParameters: string): Promise<unknown> {
+    private async queryPublicEndpoint(apiMethod: KRAKEN_PUBLIC_METHOD, inputParameters: string): Promise<unknown> {
         const url = Kraken.BASE_DOMAIN + Kraken.PUBLIC_PATH + apiMethod + "?" + inputParameters;
         const jsonData = await axios.get(url);
         return jsonData.data;
     }
 
-    private async queryPrivateEndpoint(apiMethod: PRIVATE_METHOD, inputParameters: string): Promise<unknown> {
+    private async queryPrivateEndpoint(apiMethod: KRAKEN_PRIVATE_METHOD, inputParameters: string): Promise<unknown> {
         const url = Kraken.BASE_DOMAIN + Kraken.PRIVATE_PATH + apiMethod;
 
         const nonce = Date.now().toString();
