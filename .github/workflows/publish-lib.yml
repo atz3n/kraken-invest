@@ -1,0 +1,59 @@
+name: Publish lib package
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Package version
+        required: false
+    
+
+jobs:
+  test-lib:
+    uses: ./.github/workflows/test-project.yml
+    secrets: inherit
+    with:
+      project_dir: packages/lib
+
+  publish-lib:
+    needs: test-lib
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Check out project
+        uses: actions/checkout@v1
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+          registry-url: https://registry.npmjs.org
+        
+      - name: Get package version
+        run: echo "VERSION=$(echo ${GITHUB_REF:10})" >> $GITHUB_ENV
+      
+      # - name: Set package version
+      #   run: |
+      #     if [ "${{ inputs.version }}" != "" ]; then
+      #       echo "RELEASE_IMAGE_TAG=${{ inputs.registry_name }}/${{ inputs.image_name }}:${{ inputs.version }}" >> $GITHUB_ENV
+      #     fi
+
+      # - name: Set up package version
+      #   run: npm --no-git-tag-version --allow-same-version version $RELEASE_VERSION
+   
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build project
+        run: yarn build
+
+      - name: Create and publish package
+        run: |
+          if [ "${{ inputs.version }}" != "" ]; then
+            yarn publish --access public --minor
+          else
+            yarn publish --access public --new-version {{ inputs.version }}
+          fi
+
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
