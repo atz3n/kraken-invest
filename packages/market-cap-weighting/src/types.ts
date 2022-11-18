@@ -15,7 +15,27 @@ export interface QuoteOrderRequest {
 
 
 export interface Order {
-    pair: string;
-    volume: string;
+    baseSymbol: string;
+    quoteSymbol: string;
+    volume: number;
     orderId: string;
+}
+
+
+export interface CumVolume {
+    symbol: string;
+    volume: number;
+}
+
+
+export interface BaseAsset {
+    symbol: string;
+    withdrawAddress: string;
+}
+
+
+export interface Withdraw {
+    symbol: string;
+    volume: number;
+    withdrawId: string;
 }
