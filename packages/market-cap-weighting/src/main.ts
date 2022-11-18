@@ -1,10 +1,12 @@
 import { schedule } from "node-cron";
 import { buyConditionally, stopAndWithdrawConditionally, withdrawConditionally, initStateStore } from "./helpers";
 import { EnvVars } from "./lib/EnvVars";
-import { ConsoleTransport, FileTransport, initLogger, Kraken, logger } from "@atz3n/kraken-invest-lib";
+import { ConsoleTransport, FileTransport, initLogger, Kraken, KRAKEN_PUBLIC_METHOD, logger } from "@atz3n/kraken-invest-lib";
 import { createStateStore } from "./storage/state/stateStoreFactory";
 import { StorageType } from "./storage/StorageType";
 import { CoinGecko } from "./lib/CoinGecko";
+import { AssetMapper } from "./lib/AssetMapper";
+import { initSchedules } from "./schedule";
 
 
 async function main() {
@@ -22,14 +24,25 @@ async function main() {
     );
     await initStateStore(stateStore);
 
-    logger.info("Init schedules...");
+    logger.info("Init asset mapper...");
+    const assetMapper = new AssetMapper({
+        location: "",
+        resourceType: "file"
+    });
+    await assetMapper.updateMapping();
+
+    logger.info("Init kraken...");
     const kraken = new Kraken({
         apiKeySecret: EnvVars.KRAKEN_PRIVATE_KEY,
         apiKeyId: EnvVars.KRAKEN_API_KEY
     });
 
+    logger.info("Init coinGecko...");
+    const coinGecko = new CoinGecko();
+
+    logger.info("Init tasks...");
     const task = schedule(EnvVars.CRON_BUY_SCHEDULE, async () => {
-        await buyConditionally(kraken, stateStore);
+        await buyConditionally(kraken, coinGecko, assetMapper, stateStore);
     });
 
     if (EnvVars.NUMBER_OF_BUYS > 0) {
@@ -47,11 +60,43 @@ async function main() {
 
 
 // main();
-async function run() {
-    const coinGecko = new CoinGecko();
-    await coinGecko.init({ coins: ["btc", "eth"] });
-    const coins = await coinGecko.getMarketCaps();
-    console.log(coins);
+// async function run() {
+    // const kraken = new Kraken();
+    // const resp = await kraken.request(KRAKEN_PUBLIC_METHOD.Assets);
+    // console.log(resp);
+//     const assetMapper = new AssetMapper({
+//         resourceType: "file",
+//         location: "asset-mapping.json"
+//     });
+//     const mappings = await assetMapper.init();
+//     console.log(mappings);
+//     const coinGecko = new CoinGecko();
+//     const ids = mappings.map(mapping => mapping.coinGeckoId);
+//     const coins = await coinGecko.getMarketCaps(ids);
+//     console.log(coins);
+
+//     let sum = 0;
+//     const extendedCoins: {id: string, cap: number, ratio: number}[] = [];
+//     coins.forEach(coin => sum += coin.cap);
+//     console.log(sum);
+//     coins.forEach((coin) => {
+//         const ratio = coin.cap / sum;
+//         extendedCoins.push({ ...coin, ...{ ratio } });
+//     });
+//     console.log(extendedCoins);
+
+//     const investingAmount = 200;
+//     extendedCoins.forEach((coin) => {
+//         console.log(coin.id);
+//         console.log(investingAmount * coin.ratio);
+//     });
+
+// }
+
+// run();
+
+function run() {
+    initSchedules();
 }
 
 run();

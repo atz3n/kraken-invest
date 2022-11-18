@@ -1,14 +1,16 @@
 export type State = {
     id?: string;
-    pair: string;
+    trades: {
+        pair: string;
+        volume: number;
+    }[];
     counter: number;
-    volume: number;
     schedule: string;
 }
 
 
 export interface IStateStore {
     upsert(state: State): Promise<void>;
-    get(): Promise<State | undefined>;
+    get(): Promise<State>;
     delete(): Promise<void>
 }
