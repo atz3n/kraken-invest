@@ -11,7 +11,7 @@ interface Options {
     boughtCb: (orders: Order[]) => Promise<void> | void;
 }
 
-export class QuoteBuyerService implements TaskService {
+export class QuoteBuyService implements TaskService {
     constructor(private readonly options: Options) {}
 
 

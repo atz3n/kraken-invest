@@ -8,7 +8,7 @@ interface Options {
     quoteInvestingAmount: number;
 }
 
-export class FundsCheckerService implements TaskService {
+export class FundsCheckService implements TaskService {
     constructor(private readonly options: Options) {}
 
 

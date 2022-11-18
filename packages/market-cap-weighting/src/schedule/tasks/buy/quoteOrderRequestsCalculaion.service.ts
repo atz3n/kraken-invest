@@ -9,7 +9,7 @@ interface Options {
     quoteOrderRequestsCb: (quoteOrderRequests: QuoteOrderRequest[]) => Promise<void> | void;
 }
 
-export class QuoteRequestsCalculatorService implements TaskService {
+export class QuoteRequestsCalculationService implements TaskService {
     constructor(private readonly options: Options) {}
 
 

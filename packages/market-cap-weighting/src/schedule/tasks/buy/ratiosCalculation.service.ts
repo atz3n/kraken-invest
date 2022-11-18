@@ -11,7 +11,7 @@ interface Options {
     ratiosCb: (ratios: Ratio[]) => Promise<void> | void;
 }
 
-export class RatiosCalculatorService implements TaskService {
+export class RatiosCalculationService implements TaskService {
     constructor(private readonly options: Options) {}
 
 
