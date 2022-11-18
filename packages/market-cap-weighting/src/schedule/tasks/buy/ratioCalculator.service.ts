@@ -11,7 +11,6 @@ interface Options {
     ratiosCb: (ratios: Ratio[]) => void;
 }
 
-
 export class RatiosCalculatorService implements TaskService {
     constructor(private readonly options: Options) {}
 

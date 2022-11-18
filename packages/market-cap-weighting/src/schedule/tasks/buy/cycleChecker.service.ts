@@ -7,7 +7,6 @@ interface Options {
     maxCycles: number;
 }
 
-
 export class CycleCheckerService implements TaskService {
     constructor(private readonly options: Options) {}
 

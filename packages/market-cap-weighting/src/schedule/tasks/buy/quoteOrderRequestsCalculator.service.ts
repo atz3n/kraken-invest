@@ -9,7 +9,6 @@ interface Options {
     quoteOrderRequestsCb: (quoteOrderRequests: QuoteOrderRequest[]) => void;
 }
 
-
 export class QuoteRequestsCalculatorService implements TaskService {
     constructor(private readonly options: Options) {}
 

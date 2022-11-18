@@ -55,7 +55,7 @@ export enum KRAKEN_PUBLIC_METHOD {
 
 
 export interface IKraken {
-    request<T>(method: KRAKEN_PRIVATE_METHOD | KRAKEN_PUBLIC_METHOD, params?: Record<string, string>): Promise<T>
+    request<T>(method: KRAKEN_PRIVATE_METHOD | KRAKEN_PUBLIC_METHOD, params?: Record<string, string>): Promise<T>;
 }
 
 

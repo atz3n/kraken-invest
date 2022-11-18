@@ -12,16 +12,16 @@ import { QuoteRequestsCalculatorService } from "./quoteOrderRequestsCalculator.s
 import { RatiosCalculatorService as RatiosCalculatorService } from "./ratioCalculator.service";
 
 
+let ratios: Ratio[] = [];
+let quoteOrderRequests: QuoteOrderRequest[] = [];
+
+
 interface Params {
     stateStore: IStateStore;
     kraken: IKraken;
     assetMapper: IAssetMapper;
     coinGecko: ICoinGecko;
 }
-
-let ratios: Ratio[] = [];
-let quoteOrderRequests: QuoteOrderRequest[] = [];
-
 
 export function createBuyTask(params: Params): Task {
     return createTask({

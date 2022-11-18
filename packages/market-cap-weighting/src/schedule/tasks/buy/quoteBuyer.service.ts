@@ -11,7 +11,6 @@ interface Options {
     boughtCb: (orders: Order[]) => void;
 }
 
-
 export class QuoteBuyerService implements TaskService {
     constructor(private readonly options: Options) {}
 
@@ -24,12 +23,8 @@ export class QuoteBuyerService implements TaskService {
 
             const volume = await this.getVolume(this.options.kraken, pair, quoteAmount, this.options.volumeDecimals);
             const orderId = await this.setOrder(this.options.kraken, pair, volume);
-            // logger.info(`Set order ${orderId} to buy ${volume} ${baseSymbol} with ${quoteSymbol}`);
-            orders.push({
-                pair,
-                volume,
-                orderId
-            });
+
+            orders.push({ pair, volume, orderId });
             this.options.buyCb(orderId, volume, baseSymbol, quoteSymbol);
         }
         this.options.boughtCb(orders);
