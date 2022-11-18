@@ -4,7 +4,6 @@ import { ICoinGecko } from "../lib/CoinGecko";
 import { IStateStore } from "../storage/state/IStateStore";
 import { Scheduler } from "./Scheduler";
 import { createBuyTask } from "./tasks/buy/buy.controller";
-import { createMappingUpdateTask } from "./tasks/mappingUpdate/mappingUpdate.controller";
 
 
 interface Params {
@@ -21,9 +20,6 @@ export function initTasks(params : Params) {
             coinGecko: params.coinGecko,
             kraken: params.kraken,
             stateStore: params.stateStore
-        }),
-        createMappingUpdateTask({
-            assetMapper: params.assetMapper
         })
     ];
 
