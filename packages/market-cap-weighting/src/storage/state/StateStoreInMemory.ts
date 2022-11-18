@@ -13,7 +13,7 @@ export class StateStoreInMemory extends AInMemoryStore implements IStateStore {
     }
 
 
-    public async get(): Promise<State | undefined> {
+    public async get(): Promise<State> {
         return this.store[0];
     }
 

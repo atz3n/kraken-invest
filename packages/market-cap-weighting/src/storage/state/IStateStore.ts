@@ -1,9 +1,9 @@
+import { CumVolume } from "../../types";
+
+
 export type State = {
     id?: string;
-    trades: {
-        pair: string;
-        volume: number;
-    }[];
+    cumVolumes: CumVolume[];
     counter: number;
     schedule: string;
 }
