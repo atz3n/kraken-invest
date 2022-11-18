@@ -5,7 +5,6 @@ export type State = {
     id?: string;
     cumVolumes: CumVolume[];
     counter: number;
-    schedule: string;
 }
 
 

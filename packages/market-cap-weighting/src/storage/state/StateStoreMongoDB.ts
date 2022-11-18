@@ -11,14 +11,11 @@ export class StateStoreMongoDB extends AMongoDBStore implements IStateStore {
         super({
             model: model("State", new Schema<State>({
                 id: { type: String, required: true },
-                cumVolumes: [[
-                    {
-                        symbol: { type: String, required: true },
-                        volume: { type: Number, required: true }
-                    }
-                ]],
-                counter: { type: Number, required: true },
-                schedule: { type: String, required: true },
+                cumVolumes: [[{
+                    symbol: { type: String, required: true },
+                    volume: { type: Number, required: true }
+                }]],
+                counter: { type: Number, required: true }
             })),
             url: options.mongoUrl
         });
