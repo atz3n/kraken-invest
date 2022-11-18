@@ -5,11 +5,11 @@ import { EnvVars } from "../../../lib/EnvVars";
 import { IStateStore } from "../../../storage/state/IStateStore";
 import { Order, QuoteOrderRequest, Ratio } from "../../../types";
 import { createTask, Task } from "../../taskFactory";
-import { CycleCheckerService } from "./cycleChecker.service";
-import { FundsCheckerService } from "./fundsChecker.service";
-import { QuoteBuyerService } from "./quoteBuyer.service";
-import { QuoteRequestsCalculatorService } from "./quoteOrderRequestsCalculator.service";
-import { RatiosCalculatorService as RatiosCalculatorService } from "./ratioCalculator.service";
+import { CycleCounterCheckService } from "./cycleCounterCheck.service";
+import { FundsCheckService } from "./fundsCheck.service";
+import { QuoteBuyService } from "./quoteBuy.service";
+import { QuoteRequestsCalculationService } from "./quoteOrderRequestsCalculaion.service";
+import { RatiosCalculationService as RatiosCalculationService } from "./ratiosCalculation.service";
 
 
 let ratios: Ratio[] = [];
@@ -27,19 +27,12 @@ export function createBuyTask(params: Params): Task {
     return createTask({
         cronSchedule: EnvVars.CRON_BUY_SCHEDULE,
         services: [
-            new CycleCheckerService({
-                maxCycles: EnvVars.NUMBER_OF_BUYS,
-                getCycleCount: async () => {
-                    const state = await params.stateStore.get();
-                    return state.counter;
-                }
-            }),
-            new FundsCheckerService({
+            new FundsCheckService({
                 kraken: params.kraken,
                 quoteInvestingAmount: EnvVars.QUOTE_INVESTING_AMOUNT,
                 quoteSymbol: EnvVars.QUOTE_SYMBOL
             }),
-            new RatiosCalculatorService({
+            new RatiosCalculationService({
                 assetMapper: params.assetMapper,
                 baseSymbols: (() => EnvVars.BASE_ASSETS.map(asset => asset.symbol))(),
                 coinGecko: params.coinGecko,
@@ -47,7 +40,7 @@ export function createBuyTask(params: Params): Task {
                     ratios = _ratios;
                 }
             }),
-            new QuoteRequestsCalculatorService({
+            new QuoteRequestsCalculationService({
                 quoteInvestingAmount: EnvVars.QUOTE_INVESTING_AMOUNT,
                 quoteSymbol: EnvVars.QUOTE_SYMBOL,
                 ratios,
@@ -55,7 +48,7 @@ export function createBuyTask(params: Params): Task {
                     quoteOrderRequests = _quoteOrderRequests;
                 }
             }),
-            new QuoteBuyerService({
+            new QuoteBuyService({
                 kraken: params.kraken,
                 volumeDecimals: EnvVars.VOLUME_DECIMAL,
                 quoteOrderRequests,
@@ -65,7 +58,19 @@ export function createBuyTask(params: Params): Task {
                 boughtCb: async (orders: Order[]) => {
                     await updateVolumes(params.stateStore, orders);
                 }
-            })
+            }),
+            new CycleCounterCheckService({
+                numberOfBuys: EnvVars.NUMBER_OF_BUYS,
+                getCycleCounter: async () => {
+                    const state = await params.stateStore.get();
+                    return state.counter;
+                },
+                cycleCounterCb: async (cycleCounter) => {
+                    const state = await params.stateStore.get();
+                    state.counter = cycleCounter;
+                    await params.stateStore.upsert(state);
+                }
+            }),
         ]
     });
 }
