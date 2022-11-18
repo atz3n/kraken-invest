@@ -11,10 +11,14 @@ export class StateStoreMongoDB extends AMongoDBStore implements IStateStore {
         super({
             model: model("State", new Schema<State>({
                 id: { type: String, required: true },
-                pair: { type: String, required: true },
+                cumVolumes: [[
+                    {
+                        symbol: { type: String, required: true },
+                        volume: { type: Number, required: true }
+                    }
+                ]],
                 counter: { type: Number, required: true },
                 schedule: { type: String, required: true },
-                volume: { type: Number, required: true }
             })),
             url: options.mongoUrl
         });
@@ -27,7 +31,7 @@ export class StateStoreMongoDB extends AMongoDBStore implements IStateStore {
     }
 
 
-    public async get(): Promise<State | undefined> {
+    public async get(): Promise<State> {
         return (await this._find<State>({}))[0];
     }
 

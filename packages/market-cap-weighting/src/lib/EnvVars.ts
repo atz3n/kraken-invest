@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import { BaseAsset } from "../types";
 
 
 export enum RUN_CONTEXT {
@@ -15,7 +16,7 @@ export class EnvVars {
     public static KRAKEN_PRIVATE_KEY = "";
     public static KRAKEN_API_KEY = "";
     public static QUOTE_SYMBOL = "";
-    public static BASE_SYMBOL = "";
+    public static BASE_ASSETS: BaseAsset[] = [];
     public static QUOTE_INVESTING_AMOUNT = 0;
     public static NUMBER_OF_BUYS = 0;
     public static VOLUME_DECIMAL = 0;
@@ -34,6 +35,7 @@ export class EnvVars {
         this.isInitialized = true;
 
         this.set_RUN_CONTEXT();
+        this.set_BASE_ASSETS();
 
         // this.setVar("KRAKEN_PRIVATE_KEY", (envVar) => {
         //     this.KRAKEN_PRIVATE_KEY = String(envVar);
@@ -88,6 +90,39 @@ export class EnvVars {
             dotenv.config({ path: __dirname + "/../../test/test.env" });
         } else {
             dotenv.config();
+        }
+    }
+
+    private static set_BASE_ASSETS(): void {
+        if (!process.env.BASE_ASSETS) {
+            throw new Error("BASE_ASSETS must be defined");
+        }
+
+        try {
+            const configs = JSON.parse(process.env.BASE_ASSETS);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            configs.forEach((config: any) => {
+                if (!Array.isArray(config)) {
+                    this.BASE_ASSETS.push({
+                        symbol: config,
+                        withdrawAddress: ""
+                    });
+                    return;
+                }
+
+                this.BASE_ASSETS.push({
+                    symbol: config[0],
+                    withdrawAddress: config[1] || ""
+                });
+            });
+        } catch (error) {
+            let message = "";
+            message += "Could not load BASE_ASSETS\n";
+            message += "supported configuration format:\n";
+            message += "[[\"<symbol>\", \"<wallet address>\"], [\"<symbol>\"], \"<symbol>\"]\n";
+            message += "for example:\n";
+            message += "[[\"BTC\", \"My BTC Wallet\"], [\"ETH\"], \"LTC\"]\n";
+            throw new Error(message);
         }
     }
 

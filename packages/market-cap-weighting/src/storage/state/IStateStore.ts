@@ -1,14 +1,16 @@
+import { CumVolume } from "../../types";
+
+
 export type State = {
     id?: string;
-    pair: string;
+    cumVolumes: CumVolume[];
     counter: number;
-    volume: number;
     schedule: string;
 }
 
 
 export interface IStateStore {
     upsert(state: State): Promise<void>;
-    get(): Promise<State | undefined>;
+    get(): Promise<State>;
     delete(): Promise<void>
 }

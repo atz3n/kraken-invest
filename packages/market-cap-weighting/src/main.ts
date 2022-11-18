@@ -1,10 +1,10 @@
-import { schedule } from "node-cron";
-import { buyConditionally, stopAndWithdrawConditionally, withdrawConditionally, initStateStore } from "./helpers";
-import { EnvVars } from "./lib/EnvVars";
 import { ConsoleTransport, FileTransport, initLogger, Kraken, logger } from "@atz3n/kraken-invest-lib";
+import { AssetMapper } from "./lib/AssetMapper";
+import { CoinGecko } from "./lib/CoinGecko";
+import { EnvVars } from "./lib/EnvVars";
+import { initTasks } from "./schedule";
 import { createStateStore } from "./storage/state/stateStoreFactory";
 import { StorageType } from "./storage/StorageType";
-import { CoinGecko } from "./lib/CoinGecko";
 
 
 async function main() {
@@ -16,42 +16,35 @@ async function main() {
     });
 
     logger.info("Init database...");
-    const stateStore = createStateStore(EnvVars.MONGO_DB_URL
-        ? StorageType.MONGO_DB
-        : StorageType.IN_MEMORY
-    );
-    await initStateStore(stateStore);
+    const storageType = EnvVars.MONGO_DB_URL ? StorageType.MONGO_DB : StorageType.IN_MEMORY;
+    const stateStore = createStateStore(storageType);
+    // await initStateStore(stateStore);
 
-    logger.info("Init schedules...");
+    logger.info("Init asset mapper...");
+    const assetMapper = new AssetMapper({
+        location: "",
+        resourceType: "file"
+    });
+    await assetMapper.updateMapping();
+
+    logger.info("Init kraken...");
     const kraken = new Kraken({
         apiKeySecret: EnvVars.KRAKEN_PRIVATE_KEY,
         apiKeyId: EnvVars.KRAKEN_API_KEY
     });
 
-    const task = schedule(EnvVars.CRON_BUY_SCHEDULE, async () => {
-        await buyConditionally(kraken, stateStore);
+    logger.info("Init coinGecko...");
+    const coinGecko = new CoinGecko();
+
+    logger.info("Init tasks...");
+    initTasks({
+        assetMapper,
+        coinGecko,
+        kraken,
+        stateStore
     });
 
-    if (EnvVars.NUMBER_OF_BUYS > 0) {
-        const interval = setInterval(() => {
-            stopAndWithdrawConditionally(kraken, interval, task, stateStore);
-        }, 1000);
-    } else if (EnvVars.ENABLE_WITHDRAWAL) {
-        schedule(EnvVars.CRON_WITHDRAW_SCHEDULE, async () => {
-            await withdrawConditionally(kraken, stateStore);
-        });
-    }
-
-    logger.info("Done. Asset Cost Averaging Bot started.");
+    logger.info("Done. Market Cap Weighting Bot started.");
 }
 
-
-// main();
-async function run() {
-    const coinGecko = new CoinGecko();
-    await coinGecko.init({ coins: ["btc", "eth"] });
-    const coins = await coinGecko.getMarketCaps();
-    console.log(coins);
-}
-
-run();
+main();
