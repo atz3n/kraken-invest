@@ -25,7 +25,6 @@ export class EnvVars {
     public static WITHDRAWAL_ADDRESS = "";
     public static ENABLE_FILE_LOGGING = false;
     public static MONGO_DB_URL = "";
-    public static CRON_UPDATE_MAPPING_SCHEDULE = "";
 
 
     public static load(): void {
