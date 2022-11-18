@@ -14,7 +14,7 @@ export interface AssetMapping {
 
 
 export interface IAssetMapper {
-    init(): Promise<AssetMapping[]>;
+    updateMapping(): Promise<AssetMapping[]>;
     getMapping(id: string): AssetMapping
 }
 

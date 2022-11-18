@@ -1,12 +1,12 @@
+import { ConsoleTransport, FileTransport, initLogger, Kraken, logger } from "@atz3n/kraken-invest-lib";
 import { schedule } from "node-cron";
-import { buyConditionally, stopAndWithdrawConditionally, withdrawConditionally, initStateStore } from "./helpers";
+import { buyConditionally, initStateStore, stopAndWithdrawConditionally, withdrawConditionally } from "./helpers";
+import { AssetMapper } from "./lib/AssetMapper";
+import { CoinGecko } from "./lib/CoinGecko";
 import { EnvVars } from "./lib/EnvVars";
-import { ConsoleTransport, FileTransport, initLogger, Kraken, KRAKEN_PUBLIC_METHOD, logger } from "@atz3n/kraken-invest-lib";
+import { initTasks } from "./schedule";
 import { createStateStore } from "./storage/state/stateStoreFactory";
 import { StorageType } from "./storage/StorageType";
-import { CoinGecko } from "./lib/CoinGecko";
-import { AssetMapper } from "./lib/AssetMapper";
-import { initSchedules } from "./schedule";
 
 
 async function main() {
@@ -95,8 +95,44 @@ async function main() {
 
 // run();
 
-function run() {
-    initSchedules();
+async function run() {
+    initLogger({
+        level: "info",
+        transports: EnvVars.ENABLE_FILE_LOGGING
+            ? [ new ConsoleTransport(), new FileTransport() ]
+            : [ new ConsoleTransport() ]
+    });
+
+    logger.info("Init database...");
+    const storageType = EnvVars.MONGO_DB_URL ? StorageType.MONGO_DB : StorageType.IN_MEMORY;
+    const stateStore = createStateStore(storageType);
+    // await initStateStore(stateStore);
+
+    logger.info("Init asset mapper...");
+    const assetMapper = new AssetMapper({
+        location: "",
+        resourceType: "file"
+    });
+    await assetMapper.updateMapping();
+
+    logger.info("Init kraken...");
+    const kraken = new Kraken({
+        apiKeySecret: EnvVars.KRAKEN_PRIVATE_KEY,
+        apiKeyId: EnvVars.KRAKEN_API_KEY
+    });
+
+    logger.info("Init coinGecko...");
+    const coinGecko = new CoinGecko();
+
+    logger.info("Init tasks...");
+    initTasks({
+        assetMapper,
+        coinGecko,
+        kraken,
+        stateStore
+    });
+
+    logger.info("Done. Market Cap Weighting Bot started.");
 }
 
 run();

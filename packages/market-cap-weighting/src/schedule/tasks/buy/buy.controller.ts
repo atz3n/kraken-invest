@@ -40,37 +40,29 @@ export function createBuyTask(params: Params): Task {
                 assetMapper: params.assetMapper,
                 baseSymbols: [EnvVars.BASE_SYMBOL],
                 coinGecko: params.coinGecko,
-                ratiosCb
+                ratiosCb: (_ratios) => {
+                    ratios = _ratios;
+                }
             }),
             new QuoteRequestsCalculatorService({
                 quoteInvestingAmount: EnvVars.QUOTE_INVESTING_AMOUNT,
                 quoteSymbol: EnvVars.QUOTE_SYMBOL,
                 ratios,
-                quoteOrderRequestsCb
+                quoteOrderRequestsCb: (_quoteOrderRequests) => {
+                    quoteOrderRequests = _quoteOrderRequests;
+                }
             }),
             new QuoteBuyerService({
                 kraken: params.kraken,
                 volumeDecimals: EnvVars.VOLUME_DECIMAL,
                 quoteOrderRequests,
-                buyCb,
-                boughtCb
+                buyCb: (orderId, volume, baseSymbol, quoteSymbol) => {
+                    logger.info(`Set order ${orderId} to buy ${volume} ${baseSymbol} with ${quoteSymbol}`);
+                },
+                boughtCb: (orders: Order[]) => {
+                    console.log(orders);
+                }
             })
         ]
     });
-}
-
-function ratiosCb(_ratios: Ratio[]): void {
-    ratios = _ratios;
-}
-
-function quoteOrderRequestsCb(_quoteOrderRequests: QuoteOrderRequest[]): void {
-    quoteOrderRequests = _quoteOrderRequests;
-}
-
-function buyCb(orderId: string, volume: string, baseSymbol: string, quoteSymbol: string): void {
-    logger.info(`Set order ${orderId} to buy ${volume} ${baseSymbol} with ${quoteSymbol}`);
-}
-
-function boughtCb(orders: Order[]) {
-    console.log(orders);
 }
