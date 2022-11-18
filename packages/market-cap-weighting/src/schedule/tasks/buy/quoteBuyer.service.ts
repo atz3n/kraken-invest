@@ -7,8 +7,8 @@ interface Options {
     kraken: IKraken;
     quoteOrderRequests: QuoteOrderRequest[];
     volumeDecimals: number;
-    buyCb: (orderId: string, volume: string, baseSymbol: string, quoteSymbol: string) => void;
-    boughtCb: (orders: Order[]) => void;
+    buyCb: (orderId: string, volume: number, baseSymbol: string, quoteSymbol: string) => Promise<void> | void;
+    boughtCb: (orders: Order[]) => Promise<void> | void;
 }
 
 export class QuoteBuyerService implements TaskService {
@@ -24,10 +24,10 @@ export class QuoteBuyerService implements TaskService {
             const volume = await this.getVolume(this.options.kraken, pair, quoteAmount, this.options.volumeDecimals);
             const orderId = await this.setOrder(this.options.kraken, pair, volume);
 
-            orders.push({ pair, volume, orderId });
-            this.options.buyCb(orderId, volume, baseSymbol, quoteSymbol);
+            orders.push({ baseSymbol, quoteSymbol, volume, orderId });
+            await this.options.buyCb(orderId, volume, baseSymbol, quoteSymbol);
         }
-        this.options.boughtCb(orders);
+        await this.options.boughtCb(orders);
     }
 
     private async getVolume(
@@ -35,19 +35,19 @@ export class QuoteBuyerService implements TaskService {
         pair: string,
         investingAmount: number,
         volumeDecimals: number
-    ): Promise<string> {
+    ): Promise<number> {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const price = await kraken.request<{ result: any }>(KRAKEN_PUBLIC_METHOD.Ticker, { pair });
         const askPrice = price.result[pair].a[0];
-        return (investingAmount / askPrice).toFixed(volumeDecimals);
+        return +(investingAmount / askPrice).toFixed(volumeDecimals);
     }
 
-    private async setOrder(kraken: IKraken, pair: string, volume: string): Promise<string> {
+    private async setOrder(kraken: IKraken, pair: string, volume: number): Promise<string> {
         const order = await kraken.request<{ result: { txid: string[] }}>(KRAKEN_PRIVATE_METHOD.AddOrder, {
             ordertype: "market",
             type: "buy",
             pair,
-            volume
+            volume: "" + volume
         });
         return order.result.txid[0];
     }

@@ -6,7 +6,7 @@ interface Options {
     ratios: Ratio[];
     quoteSymbol: string;
     quoteInvestingAmount: number;
-    quoteOrderRequestsCb: (quoteOrderRequests: QuoteOrderRequest[]) => void;
+    quoteOrderRequestsCb: (quoteOrderRequests: QuoteOrderRequest[]) => Promise<void> | void;
 }
 
 export class QuoteRequestsCalculatorService implements TaskService {
@@ -23,6 +23,6 @@ export class QuoteRequestsCalculatorService implements TaskService {
                 quoteSymbol: this.options.quoteSymbol
             });
         });
-        this.options.quoteOrderRequestsCb(quoteOrderRequests);
+        await this.options.quoteOrderRequestsCb(quoteOrderRequests);
     }
 }

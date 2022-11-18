@@ -29,7 +29,10 @@ export function createBuyTask(params: Params): Task {
         services: [
             new CycleCheckerService({
                 maxCycles: EnvVars.NUMBER_OF_BUYS,
-                stateStore: params.stateStore
+                getCycleCount: async () => {
+                    const state = await params.stateStore.get();
+                    return state.counter;
+                }
             }),
             new FundsCheckerService({
                 kraken: params.kraken,
@@ -38,7 +41,7 @@ export function createBuyTask(params: Params): Task {
             }),
             new RatiosCalculatorService({
                 assetMapper: params.assetMapper,
-                baseSymbols: [EnvVars.BASE_SYMBOL],
+                baseSymbols: (() => EnvVars.BASE_ASSETS.map(asset => asset.symbol))(),
                 coinGecko: params.coinGecko,
                 ratiosCb: (_ratios) => {
                     ratios = _ratios;
@@ -59,10 +62,22 @@ export function createBuyTask(params: Params): Task {
                 buyCb: (orderId, volume, baseSymbol, quoteSymbol) => {
                     logger.info(`Set order ${orderId} to buy ${volume} ${baseSymbol} with ${quoteSymbol}`);
                 },
-                boughtCb: (orders: Order[]) => {
-                    console.log(orders);
+                boughtCb: async (orders: Order[]) => {
+                    await updateVolumes(params.stateStore, orders);
                 }
             })
         ]
     });
+}
+
+async function updateVolumes(stateStore: IStateStore, orders: Order[]): Promise<void> {
+    const state = await stateStore.get();
+    orders.forEach((order) => {
+        for (let i = 0 ; i < state.cumVolumes.length ; i++) {
+            if (order.baseSymbol === state.cumVolumes[i].symbol) {
+                state.cumVolumes[i].volume += order.volume;
+            }
+        }
+    });
+    await stateStore.upsert(state);
 }

@@ -8,7 +8,7 @@ interface Options {
     baseSymbols: string[];
     assetMapper: IAssetMapper;
     coinGecko: ICoinGecko;
-    ratiosCb: (ratios: Ratio[]) => void;
+    ratiosCb: (ratios: Ratio[]) => Promise<void> | void;
 }
 
 export class RatiosCalculatorService implements TaskService {
@@ -39,6 +39,6 @@ export class RatiosCalculatorService implements TaskService {
             ratios.push({ ...coin, ...{ ratio } });
         });
 
-        this.options.ratiosCb(ratios);
+        await this.options.ratiosCb(ratios);
     }
 }
