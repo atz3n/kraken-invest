@@ -27,19 +27,21 @@ export class WithdrawalService implements TaskService {
 
             const cumVolume = cumVolumes[i];
             const volume = await this.calcWithdrawVolume(this.options.kraken, cumVolume.symbol, cumVolume.volume);
-            const withdrawId = await this.withdraw(
-                this.options.kraken,
-                cumVolume.symbol,
-                baseAsset.withdrawAddress,
-                volume
-            );
+            if (volume > 0) {
+                const withdrawId = await this.withdraw(
+                    this.options.kraken,
+                    cumVolume.symbol,
+                    baseAsset.withdrawAddress,
+                    volume
+                );
 
-            withdraws.push({
-                symbol: cumVolume.symbol,
-                volume,
-                withdrawId
-            });
-            this.options.withdrawCb(withdrawId, volume, cumVolume.symbol);
+                withdraws.push({
+                    symbol: cumVolume.symbol,
+                    volume,
+                    withdrawId
+                });
+                this.options.withdrawCb(withdrawId, volume, cumVolume.symbol);
+            }
         }
         this.options.withdrewCb(withdraws);
     }
