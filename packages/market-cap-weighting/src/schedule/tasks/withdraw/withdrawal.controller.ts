@@ -21,7 +21,7 @@ export function createWithdrawalTask(params: Params): Task {
         cronSchedule: EnvVars.CRON_BUY_SCHEDULE,
         services: [
             new WithdrawalCheckService({
-                shouldWithdraw: EnvVars.ENABLE_WITHDRAWAL
+                shouldWithdraw: EnvVars.WITHDRAWAL_ADDRESS ? true : false
             }),
             new WithdrawalService({
                 kraken: params.kraken,
