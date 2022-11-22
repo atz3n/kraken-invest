@@ -15,22 +15,23 @@ interface Params {
 }
 
 export function initTasks(params : Params) {
-    const tasks = [
-        createBuyTask({
-            assetMapper: params.assetMapper,
-            coinGecko: params.coinGecko,
-            kraken: params.kraken,
-            stateStore: params.stateStore
-        }),
-        createWithdrawalTask({
-            assetMapper: params.assetMapper,
-            coinGecko: params.coinGecko,
-            kraken: params.kraken,
-            stateStore: params.stateStore
-        })
-    ];
-
-    tasks.forEach((task)  => {
-        new Scheduler({ task }).start();
+    const withdrawalTask = createWithdrawalTask({
+        assetMapper: params.assetMapper,
+        coinGecko: params.coinGecko,
+        kraken: params.kraken,
+        stateStore: params.stateStore
     });
+    const withdrawalScheduler = new Scheduler({ task: withdrawalTask });
+
+    const buyTask = createBuyTask({
+        assetMapper: params.assetMapper,
+        coinGecko: params.coinGecko,
+        kraken: params.kraken,
+        stateStore: params.stateStore,
+        withdrawalScheduler
+    });
+    const buyScheduler = new Scheduler({ task: buyTask });
+
+    buyScheduler.start();
+    withdrawalScheduler.start();
 }

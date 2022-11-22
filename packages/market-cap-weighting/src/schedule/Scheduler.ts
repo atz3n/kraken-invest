@@ -9,8 +9,12 @@ export interface Options {
 
 export class Scheduler {
     private scheduledTask?: ScheduledTask;
+    public task: Task;
 
-    constructor(private readonly options: Options) {}
+
+    constructor(private readonly options: Options) {
+        this.task = this.options.task;
+    }
 
 
     public start(): void {
@@ -19,7 +23,7 @@ export class Scheduler {
         }
         this.scheduledTask = schedule(this.options.task.cronSchedule, async () => {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            await this.options.task.start(this.scheduledTask!);
+            await this.task.start(this.scheduledTask!);
         });
     }
 

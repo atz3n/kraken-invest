@@ -6,6 +6,7 @@ import { IStateStore } from "../../../storage/state/IStateStore";
 import { Withdraw } from "../../../types";
 import { createTask, Task } from "../../taskFactory";
 import { WithdrawalService } from "./withdrawal.service";
+import { WithdrawalCheckService } from "./withdrawalCheck.service";
 
 
 interface Params {
@@ -19,6 +20,9 @@ export function createWithdrawalTask(params: Params): Task {
     return createTask({
         cronSchedule: EnvVars.CRON_BUY_SCHEDULE,
         services: [
+            new WithdrawalCheckService({
+                shouldWithdraw: EnvVars.ENABLE_WITHDRAWAL
+            }),
             new WithdrawalService({
                 kraken: params.kraken,
                 baseAssets: EnvVars.BASE_ASSETS,

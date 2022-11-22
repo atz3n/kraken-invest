@@ -4,6 +4,7 @@ import { ICoinGecko } from "../../../lib/CoinGecko";
 import { EnvVars } from "../../../lib/EnvVars";
 import { IStateStore } from "../../../storage/state/IStateStore";
 import { Order, QuoteOrderRequest, Ratio } from "../../../types";
+import { Scheduler } from "../../Scheduler";
 import { createTask, Task } from "../../taskFactory";
 import { CycleCounterCheckService } from "./cycleCounterCheck.service";
 import { FundsCheckService } from "./fundsCheck.service";
@@ -21,6 +22,7 @@ interface Params {
     kraken: IKraken;
     assetMapper: IAssetMapper;
     coinGecko: ICoinGecko;
+    withdrawalScheduler: Scheduler;
 }
 
 export function createBuyTask(params: Params): Task {
@@ -69,7 +71,8 @@ export function createBuyTask(params: Params): Task {
                     const state = await params.stateStore.get();
                     state.counter = cycleCounter;
                     await params.stateStore.upsert(state);
-                }
+                },
+                withdrawalScheduler: params.withdrawalScheduler
             }),
         ]
     });
