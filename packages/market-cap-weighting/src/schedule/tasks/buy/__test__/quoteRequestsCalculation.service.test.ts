@@ -4,7 +4,7 @@ import { QuoteRequestsCalculationService } from "../quoteOrderRequestsCalculaion
 
 
 if (!config.skipTests.includes("quoteRequestsCalculation")) {
-    it("should calculate the ratios", async () => {
+    it("should calculate the quote requests", async () => {
         let callTracker = "";
         const service = new QuoteRequestsCalculationService({
             quoteInvestingAmount: 100,
