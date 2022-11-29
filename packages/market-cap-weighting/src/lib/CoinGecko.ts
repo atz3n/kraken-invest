@@ -1,18 +1,8 @@
 import axios from "axios";
+import { ICoinGecko, MarketCaps } from "./ICoinGecko";
 
 
-export interface MarketCaps {
-    id: string;
-    cap: number;
-}
-
-
-export interface ICoinGecko {
-    getMarketCaps(assetIds: string[]): Promise<MarketCaps[]>;
-}
-
-
-export class CoinGecko {
+export class CoinGecko implements ICoinGecko {
     private readonly BASE_URL = "https://api.coingecko.com/api/v3";
 
 

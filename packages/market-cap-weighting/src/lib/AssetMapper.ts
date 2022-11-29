@@ -1,5 +1,6 @@
 import axios from "axios";
 import { readFileSync } from "fs";
+import { AssetMapping, IAssetMapper } from "./IAssetMapper";
 
 
 interface AssetMapperOptions {
@@ -7,19 +8,8 @@ interface AssetMapperOptions {
     location: string;
 }
 
-export interface AssetMapping {
-    krakenId: string;
-    coinGeckoId: string;
-}
 
-
-export interface IAssetMapper {
-    updateMapping(): Promise<AssetMapping[]>;
-    getMapping(id: string): AssetMapping
-}
-
-
-export class AssetMapper {
+export class AssetMapper implements IAssetMapper {
     private mappings: AssetMapping[] = [];
 
 

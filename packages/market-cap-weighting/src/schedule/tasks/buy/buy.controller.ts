@@ -1,6 +1,6 @@
 import { IKraken, logger } from "@atz3n/kraken-invest-lib";
-import { IAssetMapper } from "../../../lib/AssetMapper";
-import { ICoinGecko } from "../../../lib/CoinGecko";
+import { IAssetMapper } from "../../../lib/IAssetMapper";
+import { ICoinGecko } from "../../../lib/ICoinGecko";
 import { EnvVars } from "../../../lib/EnvVars";
 import { IStateStore } from "../../../storage/state/IStateStore";
 import { Order, QuoteOrderRequest, Ratio } from "../../../types";
@@ -10,7 +10,7 @@ import { CycleCounterCheckService } from "./cycleCounterCheck.service";
 import { FundsCheckService } from "./fundsCheck.service";
 import { QuoteBuyService } from "./quoteBuy.service";
 import { QuoteRequestsCalculationService } from "./quoteOrderRequestsCalculaion.service";
-import { RatiosCalculationService as RatiosCalculationService } from "./ratiosCalculation.service";
+import { RatiosCalculationService } from "./ratiosCalculation.service";
 
 
 let ratios: Ratio[] = [];

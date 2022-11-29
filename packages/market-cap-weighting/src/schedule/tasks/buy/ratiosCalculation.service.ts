@@ -1,5 +1,5 @@
-import { IAssetMapper } from "../../../lib/AssetMapper";
-import { ICoinGecko } from "../../../lib/CoinGecko";
+import { IAssetMapper } from "../../../lib/IAssetMapper";
+import { ICoinGecko } from "../../../lib/ICoinGecko";
 import { Ratio } from "../../../types";
 import { TaskService, TaskServiceParams } from "../../taskFactory";
 
