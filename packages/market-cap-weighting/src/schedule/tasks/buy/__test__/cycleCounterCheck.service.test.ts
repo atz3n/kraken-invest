@@ -1,4 +1,3 @@
-
 import { config } from "../../../../../test/config";
 import { SchedulerMock } from "../../../../../test/mocks/SchedulerMock";
 import { TaskServiceParams } from "../../../taskFactory";
@@ -28,7 +27,6 @@ if (!config.skipTests.includes("cycleCounterCheck")) {
         });
 
         await service.run(<TaskServiceParams> {});
-
         expect(callTracker).toEqual("cycleCounterCb");
     });
 
@@ -64,7 +62,6 @@ if (!config.skipTests.includes("cycleCounterCheck")) {
                 }
             }
         });
-
         expect(callTracker).toEqual("scheduleStop stopCb getTaskCbStart");
     });
 
