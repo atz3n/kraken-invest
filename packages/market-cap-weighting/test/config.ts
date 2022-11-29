@@ -4,5 +4,6 @@ export const config = {
         // "fundsCheck",
         // "ratiosCalculation",
         // "quoteRequestsCalculation",
+        // "quoteBuy",
     ]
 };
