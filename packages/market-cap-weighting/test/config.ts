@@ -3,5 +3,6 @@ export const config = {
         // "cycleCounterCheck",
         // "fundsCheck",
         // "ratiosCalculation",
+        // "quoteRequestsCalculation",
     ]
 };
