@@ -6,10 +6,9 @@ export interface Options {
     task: Task;
 }
 
-
 export class Scheduler {
     private scheduledTask?: ScheduledTask;
-    public task: Task;
+    private task: Task;
 
 
     constructor(private readonly options: Options) {
@@ -33,5 +32,10 @@ export class Scheduler {
             return;
         }
         this.scheduledTask.stop();
+    }
+
+
+    public getTask(): Task {
+        return this.options.task;
     }
 }

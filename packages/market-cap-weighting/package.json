@@ -7,8 +7,9 @@
         "dev": "RUN_CONTEXT=development ts-node-dev --cache-directory ./dev ./src/main",
         "lint": "eslint ./ --ext .ts",
         "lint:fix": "eslint ./ --fix --ext .ts",
-        "test": "RUN_CONTEXT=test jest --testEnvironment=node --verbose",
-        "test:coverage": "yarn test --coverage",
+        "test": "yarn test:unit && yarn test:e2e",
+        "test:unit": "RUN_CONTEXT=test jest --config=jest.unit.config.js",
+        "test:e2e": "RUN_CONTEXT=test jest --config=jest.e2e.config.js",
         "build": "rm -rf ./dist && tsc --skipLibCheck",
         "start": "node ./dist/src/main.js"
     },
