@@ -2,10 +2,10 @@ import { IKraken, KRAKEN_PRIVATE_METHOD, KRAKEN_PUBLIC_METHOD } from "@atz3n/kra
 
 
 export interface Options {
-    requestCb?<T>(
+    requestCb?(
         method: KRAKEN_PRIVATE_METHOD | KRAKEN_PUBLIC_METHOD,
         params?: Record<string, string> | undefined
-    ): Promise<T>
+    ): Promise<unknown>
 }
 
 export class KrakenMock implements IKraken {
@@ -17,7 +17,7 @@ export class KrakenMock implements IKraken {
         params?: Record<string, string> | undefined
     ): Promise<T> {
         if (this.options.requestCb) {
-            return this.options.requestCb(method, params);
+            return <Promise<T>> this.options.requestCb(method, params);
         }
         return <Promise<T>> {};
     }
