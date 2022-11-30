@@ -1,6 +1,6 @@
 import { IKraken } from "@atz3n/kraken-invest-lib";
-import { IAssetMapper } from "../lib/AssetMapper";
-import { ICoinGecko } from "../lib/CoinGecko";
+import { IAssetMapper } from "../lib/IAssetMapper";
+import { ICoinGecko } from "../lib/ICoinGecko";
 import { IStateStore } from "../storage/state/IStateStore";
 import { Scheduler } from "./Scheduler";
 import { createBuyTask } from "./tasks/buy/buy.controller";

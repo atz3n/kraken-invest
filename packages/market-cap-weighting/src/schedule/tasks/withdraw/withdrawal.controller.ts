@@ -1,7 +1,7 @@
 import { IKraken, logger } from "@atz3n/kraken-invest-lib";
-import { IAssetMapper } from "../../../lib/AssetMapper";
-import { ICoinGecko } from "../../../lib/CoinGecko";
 import { EnvVars } from "../../../lib/EnvVars";
+import { IAssetMapper } from "../../../lib/IAssetMapper";
+import { ICoinGecko } from "../../../lib/ICoinGecko";
 import { IStateStore } from "../../../storage/state/IStateStore";
 import { Withdraw } from "../../../types";
 import { createTask, Task } from "../../taskFactory";
