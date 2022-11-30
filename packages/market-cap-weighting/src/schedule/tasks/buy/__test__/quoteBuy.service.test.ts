@@ -1,12 +1,13 @@
 import { KRAKEN_PRIVATE_METHOD, KRAKEN_PUBLIC_METHOD } from "@atz3n/kraken-invest-lib";
 import { config } from "../../../../../test/config";
+import { fail } from "../../../../../test/helpers";
 import { KrakenMock } from "../../../../../test/mocks/KrakenMock";
 import { TaskServiceParams } from "../../../taskFactory";
 import { QuoteBuyService } from "../quoteBuy.service";
 
 
 if (!config.skipTests.includes("quoteBuy")) {
-    it("should calculate the ratios", async () => {
+    it("should buy the quote assets", async () => {
         let callTracker = "";
         const service = new QuoteBuyService({
             volumeDecimals: 2,

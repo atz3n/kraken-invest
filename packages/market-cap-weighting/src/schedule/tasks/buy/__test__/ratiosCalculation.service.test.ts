@@ -1,6 +1,8 @@
 import { config } from "../../../../../test/config";
+import { fail } from "../../../../../test/helpers";
 import { AssetMapperMock } from "../../../../../test/mocks/AssetMapperMock";
 import { CoinGeckoMock } from "../../../../../test/mocks/CoinGeckoMock";
+import { AssetMapping } from "../../../../lib/IAssetMapper";
 import { MarketCaps } from "../../../../lib/ICoinGecko";
 import { TaskServiceParams } from "../../../taskFactory";
 import { RatiosCalculationService } from "../ratiosCalculation.service";
@@ -14,6 +16,7 @@ if (!config.skipTests.includes("ratiosCalculation")) {
             assetMapper: new AssetMapperMock({
                 getMappingCb: (id) => {
                     callTracker += "getMappingCb ";
+
                     if (id === "BTC") {
                         return {
                             krakenId: id,
@@ -32,7 +35,9 @@ if (!config.skipTests.includes("ratiosCalculation")) {
                             coinGeckoId: "Litecoin"
                         };
                     }
+
                     fail("should not reach here");
+                    return <AssetMapping> {};
                 }
             }),
             coinGecko: new CoinGeckoMock({
@@ -90,6 +95,7 @@ if (!config.skipTests.includes("ratiosCalculation")) {
                         expect(ratio.ratio).toEqual(0.1);
                         continue;
                     }
+
                     fail("should not reach here");
                 }
             }

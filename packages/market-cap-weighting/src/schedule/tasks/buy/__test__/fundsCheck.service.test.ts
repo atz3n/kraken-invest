@@ -1,5 +1,6 @@
 import { KRAKEN_PRIVATE_METHOD } from "@atz3n/kraken-invest-lib";
 import { config } from "../../../../../test/config";
+import { fail } from "../../../../../test/helpers";
 import { KrakenMock } from "../../../../../test/mocks/KrakenMock";
 import { TaskServiceParams } from "../../../taskFactory";
 import { FundsCheckService } from "../fundsCheck.service";
