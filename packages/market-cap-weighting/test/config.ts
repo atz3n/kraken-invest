@@ -5,5 +5,6 @@ export const config = {
         // "ratiosCalculation",
         // "quoteRequestsCalculation",
         // "quoteBuy",
+        // "withdrawalCheck",
     ]
 };
