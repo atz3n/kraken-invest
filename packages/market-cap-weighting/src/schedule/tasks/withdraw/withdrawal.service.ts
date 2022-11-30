@@ -20,12 +20,13 @@ export class WithdrawalService implements TaskService {
 
         const withdraws: Withdraw[] = [];
         for (let i = 0 ; i < cumVolumes.length ; i++) {
+            const cumVolume = cumVolumes[i];
+
             const baseAsset = this.options.baseAssets.find(asset => asset.symbol === cumVolume.symbol);
             if (!baseAsset || !baseAsset.withdrawAddress) {
                 continue;
             }
 
-            const cumVolume = cumVolumes[i];
             const volume = await this.calcWithdrawVolume(this.options.kraken, cumVolume.symbol, cumVolume.volume);
             if (volume > 0) {
                 const withdrawId = await this.withdraw(
@@ -47,7 +48,7 @@ export class WithdrawalService implements TaskService {
     }
 
     private async calcWithdrawVolume(kraken: IKraken, baseSymbol: string, volume: number): Promise<number> {
-        const balances = await this.options.kraken.request<{ result: never }>(KRAKEN_PRIVATE_METHOD.Balance);
+        const balances = await kraken.request<{ result: never }>(KRAKEN_PRIVATE_METHOD.Balance);
         const baseBalance = balances.result[baseSymbol];
         return Math.min(baseBalance, volume);
     }
