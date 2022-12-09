@@ -1,12 +1,16 @@
-name: Publish lib package
+name: Publish lib
 
 on:
   workflow_dispatch:
     inputs:
       version:
         description: Package version
-        required: false
-    
+        type: choice
+        options: 
+          - major
+          - minor
+          - patch
+        default: "patch"
 
 jobs:
   test-lib:
@@ -17,30 +21,9 @@ jobs:
 
   publish-lib:
     needs: test-lib
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Check out project
-        uses: actions/checkout@v1
-      
-      - name: Set up Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: 16
-          registry-url: https://registry.npmjs.org
-        
-      - name: Install dependencies
-        run: yarn install
-
-      - name: Build project
-        run: yarn build
-
-      - name: Create and publish package
-        run: |
-          if [ "${{ inputs.version }}" != "" ]; then
-            yarn publish --non-interactive --access public --minor
-          else
-            yarn publish --non-interactive --access public --new-version {{ inputs.version }}
-          fi
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    uses: ./.github/workflows/publish-node-package.yml
+    secrets: inherit
+    with:
+      name: lib
+      project_dir: packages/lib
+      version: ${{ inputs.version }}
