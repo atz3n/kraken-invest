@@ -1,4 +1,4 @@
-import { ConsoleTransport, DummyTransport, initLogger } from "@atz3n/kraken-invest-common";
+import { DummyTransport, initLogger } from "@atz3n/kraken-invest-common";
 
 
 initLogger({

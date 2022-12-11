@@ -7,5 +7,6 @@ export const config = {
         // "quoteBuy",
         // "withdrawalCheck",
         // "withdrawal",
+        // "withdraw",
     ]
 };
