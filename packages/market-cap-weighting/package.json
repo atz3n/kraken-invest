@@ -27,7 +27,7 @@
         "typescript": "4.6.4"
     },
     "dependencies": {
-        "@atz3n/kraken-invest-lib": "1.3.2",
+        "@atz3n/kraken-invest-common": "^1.0.1",
         "axios": "^1.1.3",
         "dotenv": "^10.0.0",
         "mongoose": "^6.5.0",

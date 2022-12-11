@@ -1,4 +1,4 @@
-import { IKraken, KRAKEN_PRIVATE_METHOD } from "@atz3n/kraken-invest-lib";
+import { IKraken, KRAKEN_PRIVATE_METHOD } from "@atz3n/kraken-invest-common";
 import { BaseAsset, CumVolume, Withdraw } from "../../../types";
 import { TaskService, TaskServiceParams } from "../../taskFactory";
 
@@ -21,13 +21,14 @@ export class WithdrawalService implements TaskService {
         const withdraws: Withdraw[] = [];
         for (let i = 0 ; i < cumVolumes.length ; i++) {
             const cumVolume = cumVolumes[i];
-
+            console.log({ cumVolume });
             const baseAsset = this.options.baseAssets.find(asset => asset.symbol === cumVolume.symbol);
             if (!baseAsset || !baseAsset.withdrawAddress) {
                 continue;
             }
-
+            console.log({ baseAsset });
             const volume = await this.calcWithdrawVolume(this.options.kraken, cumVolume.symbol, cumVolume.volume);
+            console.log({ volume });
             if (volume > 0) {
                 const withdrawId = await this.withdraw(
                     this.options.kraken,

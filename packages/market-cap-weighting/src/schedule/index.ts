@@ -1,4 +1,4 @@
-import { IKraken } from "@atz3n/kraken-invest-lib";
+import { IKraken } from "@atz3n/kraken-invest-common";
 import { IAssetMapper } from "../lib/IAssetMapper";
 import { ICoinGecko } from "../lib/ICoinGecko";
 import { IStateStore } from "../storage/state/IStateStore";
@@ -16,8 +16,6 @@ interface Params {
 
 export function initTasks(params : Params) {
     const withdrawalTask = createWithdrawalTask({
-        assetMapper: params.assetMapper,
-        coinGecko: params.coinGecko,
         kraken: params.kraken,
         stateStore: params.stateStore
     });

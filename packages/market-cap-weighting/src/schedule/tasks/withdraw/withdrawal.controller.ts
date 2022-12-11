@@ -1,28 +1,20 @@
-import { IKraken, logger } from "@atz3n/kraken-invest-lib";
+import { IKraken, logger } from "@atz3n/kraken-invest-common";
 import { EnvVars } from "../../../lib/EnvVars";
-import { IAssetMapper } from "../../../lib/IAssetMapper";
-import { ICoinGecko } from "../../../lib/ICoinGecko";
 import { IStateStore } from "../../../storage/state/IStateStore";
 import { Withdraw } from "../../../types";
 import { createTask, Task } from "../../taskFactory";
 import { WithdrawalService } from "./withdrawal.service";
-import { WithdrawalCheckService } from "./withdrawalCheck.service";
 
 
 interface Params {
     stateStore: IStateStore;
     kraken: IKraken;
-    assetMapper: IAssetMapper;
-    coinGecko: ICoinGecko;
 }
 
 export function createWithdrawalTask(params: Params): Task {
     return createTask({
-        cronSchedule: EnvVars.CRON_BUY_SCHEDULE,
+        cronSchedule: EnvVars.CRON_WITHDRAW_SCHEDULE,
         services: [
-            new WithdrawalCheckService({
-                shouldWithdraw: EnvVars.WITHDRAWAL_ADDRESS ? true : false
-            }),
             new WithdrawalService({
                 kraken: params.kraken,
                 baseAssets: EnvVars.BASE_ASSETS,

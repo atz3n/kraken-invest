@@ -1,4 +1,4 @@
-import { KRAKEN_PRIVATE_METHOD } from "@atz3n/kraken-invest-lib";
+import { KRAKEN_PRIVATE_METHOD } from "@atz3n/kraken-invest-common";
 import { config } from "../../../../../test/config";
 import { fail } from "../../../../../test/helpers";
 import { KrakenMock } from "../../../../../test/mocks/KrakenMock";

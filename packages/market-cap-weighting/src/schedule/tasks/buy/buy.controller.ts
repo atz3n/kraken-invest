@@ -1,4 +1,4 @@
-import { IKraken, logger } from "@atz3n/kraken-invest-lib";
+import { IKraken, logger } from "@atz3n/kraken-invest-common";
 import { IAssetMapper } from "../../../lib/IAssetMapper";
 import { ICoinGecko } from "../../../lib/ICoinGecko";
 import { EnvVars } from "../../../lib/EnvVars";

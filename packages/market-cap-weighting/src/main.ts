@@ -1,4 +1,4 @@
-import { ConsoleTransport, FileTransport, initLogger, Kraken, logger } from "@atz3n/kraken-invest-lib";
+import { ConsoleTransport, FileTransport, initLogger, Kraken, logger } from "@atz3n/kraken-invest-common";
 import { AssetMapper } from "./lib/AssetMapper";
 import { CoinGecko } from "./lib/CoinGecko";
 import { EnvVars } from "./lib/EnvVars";
@@ -16,7 +16,7 @@ async function main() {
             ? [ new ConsoleTransport(), new FileTransport() ]
             : [ new ConsoleTransport() ]
     });
-
+return;
     logger.info("Init database...");
     const storageType = EnvVars.MONGO_DB_URL ? StorageType.MONGO_DB : StorageType.IN_MEMORY;
     const stateStore = createStateStore(storageType);

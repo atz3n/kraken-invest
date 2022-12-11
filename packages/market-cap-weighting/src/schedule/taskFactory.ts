@@ -1,4 +1,4 @@
-import { logger } from "@atz3n/kraken-invest-lib";
+import { logger } from "@atz3n/kraken-invest-common";
 import { ScheduledTask } from "node-cron";
 
 
@@ -44,6 +44,7 @@ export function createTask(params: TaskFactoryParams): Task {
                 }
             } catch (error) {
                 logger.error((<Error> error).message);
+                console.log(error);
             }
         }
     };

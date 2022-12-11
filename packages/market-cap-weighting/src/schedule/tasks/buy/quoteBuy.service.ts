@@ -1,4 +1,4 @@
-import { IKraken, KRAKEN_PRIVATE_METHOD, KRAKEN_PUBLIC_METHOD } from "@atz3n/kraken-invest-lib";
+import { IKraken, KRAKEN_PRIVATE_METHOD, KRAKEN_PUBLIC_METHOD } from "@atz3n/kraken-invest-common";
 import { Order, QuoteOrderRequest } from "../../../types";
 import { TaskService, TaskServiceParams } from "../../taskFactory";
 
