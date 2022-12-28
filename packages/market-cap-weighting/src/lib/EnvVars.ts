@@ -22,7 +22,6 @@ export class EnvVars {
     public static VOLUME_DECIMAL = 0;
     public static CRON_BUY_SCHEDULE = "";
     public static CRON_WITHDRAW_SCHEDULE = "";
-    public static WITHDRAWAL_ADDRESS = "";
     public static ENABLE_FILE_LOGGING = false;
     public static MONGO_DB_URL = "";
 
@@ -56,13 +55,10 @@ export class EnvVars {
         }, 5);
         this.setVar("CRON_BUY_SCHEDULE", (envVar) => {
             this.CRON_BUY_SCHEDULE = String(envVar);
-        }, "0 3 * * 6");
+        });
         this.setVar("CRON_WITHDRAW_SCHEDULE", (envVar) => {
             this.CRON_WITHDRAW_SCHEDULE = String(envVar);
         }, "0 0 0 1 1 ? 1970"); // a date in the past. Will never execute
-        this.setVar("WITHDRAWAL_ADDRESS", (envVar) => {
-            this.WITHDRAWAL_ADDRESS = String(envVar);
-        }, "");
         this.setVar("ENABLE_FILE_LOGGING", (envVar) => {
             this.ENABLE_FILE_LOGGING = this.Boolean(envVar);
         }, false);
@@ -90,6 +86,9 @@ export class EnvVars {
 
         try {
             const configs = JSON.parse(process.env.BASE_ASSETS);
+            if (!Array.isArray(configs)) {
+                throw new Error();
+            }
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             configs.forEach((config: any) => {
                 if (!Array.isArray(config)) {
