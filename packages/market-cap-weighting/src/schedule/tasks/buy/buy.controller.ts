@@ -1,20 +1,20 @@
 import { IKraken, logger } from "@atz3n/kraken-invest-common";
+import { EnvVars } from "../../../lib/EnvVars";
 import { IAssetMapper } from "../../../lib/IAssetMapper";
 import { ICoinGecko } from "../../../lib/ICoinGecko";
-import { EnvVars } from "../../../lib/EnvVars";
 import { IStateStore } from "../../../storage/state/IStateStore";
 import { Order, QuoteOrderRequest, Ratio } from "../../../types";
-import { Scheduler } from "../../Scheduler";
+import { IScheduler } from "../../IScheduler";
 import { createTask, Task } from "../../taskFactory";
 import { CycleCounterCheckService } from "./cycleCounterCheck.service";
 import { FundsCheckService } from "./fundsCheck.service";
 import { QuoteBuyService } from "./quoteBuy.service";
-import { QuoteRequestsCalculationService } from "./quoteOrderRequestsCalculaion.service";
+import { QuoteRequestsCalculationService } from "./quoteOrderRequestsCalculation.service";
 import { RatiosCalculationService } from "./ratiosCalculation.service";
 
 
-let ratios: Ratio[] = [];
-let quoteOrderRequests: QuoteOrderRequest[] = [];
+const ratios: Ratio[] = [];
+const quoteOrderRequests: QuoteOrderRequest[] = [];
 
 
 interface Params {
@@ -22,7 +22,7 @@ interface Params {
     kraken: IKraken;
     assetMapper: IAssetMapper;
     coinGecko: ICoinGecko;
-    withdrawalScheduler: Scheduler;
+    withdrawalScheduler: IScheduler;
 }
 
 export function createBuyTask(params: Params): Task {
@@ -39,7 +39,8 @@ export function createBuyTask(params: Params): Task {
                 baseSymbols: (() => EnvVars.BASE_ASSETS.map(asset => asset.symbol))(),
                 coinGecko: params.coinGecko,
                 ratiosCb: (_ratios) => {
-                    ratios = _ratios;
+                    ratios.length = 0;
+                    _ratios.forEach(ratio => ratios.push(ratio));
                 }
             }),
             new QuoteRequestsCalculationService({
@@ -47,7 +48,8 @@ export function createBuyTask(params: Params): Task {
                 quoteSymbol: EnvVars.QUOTE_SYMBOL,
                 ratios,
                 quoteOrderRequestsCb: (_quoteOrderRequests) => {
-                    quoteOrderRequests = _quoteOrderRequests;
+                    quoteOrderRequests.length = 0;
+                    _quoteOrderRequests.forEach(quoteOrderRequest => quoteOrderRequests.push(quoteOrderRequest));
                 }
             }),
             new QuoteBuyService({
