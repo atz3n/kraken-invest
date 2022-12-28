@@ -1,18 +1,8 @@
-import dotenv from "dotenv";
+import { AEnvVars } from "@atz3n/kraken-invest-common";
 import { BaseAsset } from "../types";
 
 
-export enum RUN_CONTEXT {
-    PRODUCTION,
-    DEVELOPMENT,
-    TEST
-}
-
-
-export class EnvVars {
-    private static isInitialized = false;
-
-    public static RUN_CONTEXT = RUN_CONTEXT.PRODUCTION;
+export class EnvVars extends AEnvVars {
     public static KRAKEN_PRIVATE_KEY = "";
     public static KRAKEN_API_KEY = "";
     public static QUOTE_SYMBOL = "";
@@ -27,56 +17,40 @@ export class EnvVars {
 
 
     public static load(): void {
-        if (this.isInitialized) {
-            return;
-        }
-        this.isInitialized = true;
+        this._load(() => {
+            this.set_BASE_ASSETS();
 
-        this.set_RUN_CONTEXT();
-        this.set_BASE_ASSETS();
-
-        this.setVar("KRAKEN_PRIVATE_KEY", (envVar) => {
-            this.KRAKEN_PRIVATE_KEY = String(envVar);
-        });
-        this.setVar("KRAKEN_API_KEY", (envVar) => {
-            this.KRAKEN_API_KEY = String(envVar);
-        });
-        this.setVar("QUOTE_SYMBOL", (envVar) => {
-            this.QUOTE_SYMBOL = String(envVar);
-        });
-        this.setVar("QUOTE_INVESTING_AMOUNT", (envVar) => {
-            this.QUOTE_INVESTING_AMOUNT = Number(envVar);
-        });
-        this.setVar("NUMBER_OF_BUYS", (envVar) => {
-            this.NUMBER_OF_BUYS = Number(envVar);
-        }, -1);
-        this.setVar("VOLUME_DECIMAL", (envVar) => {
-            this.VOLUME_DECIMAL = Number(envVar);
-        }, 5);
-        this.setVar("CRON_BUY_SCHEDULE", (envVar) => {
-            this.CRON_BUY_SCHEDULE = String(envVar);
-        });
-        this.setVar("CRON_WITHDRAW_SCHEDULE", (envVar) => {
-            this.CRON_WITHDRAW_SCHEDULE = String(envVar);
-        }, "0 0 0 1 1 ? 1970"); // a date in the past. Will never execute
-        this.setVar("ENABLE_FILE_LOGGING", (envVar) => {
-            this.ENABLE_FILE_LOGGING = this.Boolean(envVar);
-        }, false);
-        this.setVar("MONGO_DB_URL", (envVar) => {
-            this.MONGO_DB_URL = String(envVar);
-        }, "");
-    }
-
-    private static set_RUN_CONTEXT(): void {
-        if (process.env.RUN_CONTEXT === "development") {
-            this.RUN_CONTEXT = RUN_CONTEXT.DEVELOPMENT;
-            dotenv.config();
-        } else if (process.env.RUN_CONTEXT === "test") {
-            this.RUN_CONTEXT = RUN_CONTEXT.TEST;
-            dotenv.config({ path: __dirname + "/../../test/test.env" });
-        } else {
-            dotenv.config();
-        }
+            this.setVar("KRAKEN_PRIVATE_KEY", (envVar) => {
+                this.KRAKEN_PRIVATE_KEY = String(envVar);
+            });
+            this.setVar("KRAKEN_API_KEY", (envVar) => {
+                this.KRAKEN_API_KEY = String(envVar);
+            });
+            this.setVar("QUOTE_SYMBOL", (envVar) => {
+                this.QUOTE_SYMBOL = String(envVar);
+            });
+            this.setVar("QUOTE_INVESTING_AMOUNT", (envVar) => {
+                this.QUOTE_INVESTING_AMOUNT = Number(envVar);
+            });
+            this.setVar("NUMBER_OF_BUYS", (envVar) => {
+                this.NUMBER_OF_BUYS = Number(envVar);
+            }, -1);
+            this.setVar("VOLUME_DECIMAL", (envVar) => {
+                this.VOLUME_DECIMAL = Number(envVar);
+            }, 5);
+            this.setVar("CRON_BUY_SCHEDULE", (envVar) => {
+                this.CRON_BUY_SCHEDULE = String(envVar);
+            });
+            this.setVar("CRON_WITHDRAW_SCHEDULE", (envVar) => {
+                this.CRON_WITHDRAW_SCHEDULE = String(envVar);
+            }, "0 0 0 1 1 ? 1970"); // a date in the past. Will never execute
+            this.setVar("ENABLE_FILE_LOGGING", (envVar) => {
+                this.ENABLE_FILE_LOGGING = this.Boolean(envVar);
+            }, false);
+            this.setVar("MONGO_DB_URL", (envVar) => {
+                this.MONGO_DB_URL = String(envVar);
+            }, "");
+        }, { testEnv: __dirname + "/../../test/test.env" });
     }
 
     private static set_BASE_ASSETS(): void {
@@ -113,20 +87,6 @@ export class EnvVars {
             message += "[[\"BTC\", \"My BTC Wallet\"], [\"ETH\"], \"LTC\"]\n";
             throw new Error(message);
         }
-    }
-
-    private static setVar(envVarName: string, cb: (variable: unknown) => void, defaultVar?: unknown): void {
-        if (process.env[envVarName]) {
-            cb(process.env[envVarName]);
-        } else if (defaultVar !== undefined) {
-            cb(defaultVar);
-        } else {
-            throw new Error(`${envVarName} must be defined`);
-        }
-    }
-
-    private static Boolean(value: unknown): boolean {
-        return value === true || value === "true";
     }
 }
 
