@@ -8,3 +8,8 @@ export function fail(message = "") {
 
     expect(message).toEqual(failMessage);
 }
+
+
+export async function notCalled(): Promise<void> {
+    fail("should not reach here");
+}

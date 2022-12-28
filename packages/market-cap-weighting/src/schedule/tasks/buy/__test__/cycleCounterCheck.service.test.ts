@@ -1,5 +1,5 @@
 import { config } from "../../../../../test/config";
-import { fail } from "../../../../../test/helpers";
+import { notCalled } from "../../../../../test/helpers";
 import { SchedulerMock } from "../../../../../test/mocks/SchedulerMock";
 import { TaskServiceParams } from "../../../taskFactory";
 import { CycleCounterCheckService } from "../cycleCounterCheck.service";
@@ -90,8 +90,4 @@ if (!config.skipTests.includes("cycleCounterCheck")) {
     test("dummy", () => {
         expect(true).toBeTruthy();
     });
-}
-
-async function notCalled(): Promise<void> {
-    fail("should not reach here");
 }
