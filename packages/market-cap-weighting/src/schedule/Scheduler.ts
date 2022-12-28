@@ -36,6 +36,6 @@ export class Scheduler {
 
 
     public getTask(): Task {
-        return this.options.task;
+        return this.task;
     }
 }

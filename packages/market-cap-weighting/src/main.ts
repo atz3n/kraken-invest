@@ -16,7 +16,7 @@ async function main() {
             ? [ new ConsoleTransport(), new FileTransport() ]
             : [ new ConsoleTransport() ]
     });
-return;
+
     logger.info("Init database...");
     const storageType = EnvVars.MONGO_DB_URL ? StorageType.MONGO_DB : StorageType.IN_MEMORY;
     const stateStore = createStateStore(storageType);
