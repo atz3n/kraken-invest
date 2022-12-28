@@ -56,10 +56,24 @@ export function createBuyTask(params: Params): Task {
                 kraken: params.kraken,
                 volumeDecimals: EnvVars.VOLUME_DECIMAL,
                 quoteOrderRequests,
-                buyCb: (orderId, volume, baseSymbol, quoteSymbol) => {
-                    logger.info(`Set order ${orderId} to buy ${volume} ${baseSymbol} with ${quoteSymbol}`);
+                minVolumeCb: (baseSymbol, volume, minVolume) => {
+                    // eslint-disable-next-line max-len
+                    logger.info(`Skipping ${baseSymbol}. Minimum requested volume: ${minVolume}, calculated volume: ${volume}.`);
+                },
+                buyCb: (orderId, volume, baseSymbol, quoteAmount, quoteSymbol) => {
+                    // eslint-disable-next-line max-len
+                    logger.info(`Set order ${orderId} to buy ${volume} ${baseSymbol} for ${quoteAmount.toFixed(2)} ${quoteSymbol}.`);
                 },
                 boughtCb: async (orders: Order[]) => {
+                    let ratioText = "";
+                    orders.forEach((order) => {
+                        const [ ratio ] = ratios.filter(_ratio => _ratio.baseSymbol === order.baseSymbol);
+                        ratioText += ` ${ratio.baseSymbol} = ${(ratio.ratio * 100).toFixed(2)}%,`;
+                    });
+                    if (ratioText) {
+                        logger.info(`Order ratios:${ratioText.substring(0, ratioText.length - 1)}.`);
+                    }
+
                     await updateVolumes(params.stateStore, orders);
                 }
             }),

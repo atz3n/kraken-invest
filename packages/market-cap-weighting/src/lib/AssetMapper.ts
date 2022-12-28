@@ -76,7 +76,6 @@ export class AssetMapper implements IAssetMapper {
 
 
     public getMapping(id: string): AssetMapping {
-        console.log({ id });
         const mapping = this.mappings.find(mapping => mapping.coinGeckoId === id || mapping.krakenId === id);
         if (!mapping) {
             throw new Error("Mapping not found");
