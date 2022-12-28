@@ -8,5 +8,6 @@ export const config = {
         // "withdrawalCheck",
         // "withdrawal",
         // "withdraw",
+        // "buy",
     ]
 };

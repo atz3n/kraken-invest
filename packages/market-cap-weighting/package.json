@@ -10,7 +10,7 @@
         "test": "yarn test:unit && yarn test:e2e",
         "test:unit": "RUN_CONTEXT=test jest --config=jest.unit.config.js",
         "test:e2e": "RUN_CONTEXT=test jest --config=jest.e2e.config.js",
-        "build": "rm -rf ./dist && tsc --skipLibCheck",
+        "build": "rm -rf ./dist && tsc",
         "start": "node ./dist/src/main.js"
     },
     "devDependencies": {
