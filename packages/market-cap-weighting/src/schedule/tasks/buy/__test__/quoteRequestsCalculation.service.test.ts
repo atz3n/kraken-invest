@@ -1,7 +1,7 @@
 import { config } from "../../../../../test/config";
 import { fail } from "../../../../../test/helpers";
 import { TaskServiceParams } from "../../../taskFactory";
-import { QuoteRequestsCalculationService } from "../quoteOrderRequestsCalculaion.service";
+import { QuoteRequestsCalculationService } from "../quoteOrderRequestsCalculation.service";
 
 
 if (!config.skipTests.includes("quoteRequestsCalculation")) {

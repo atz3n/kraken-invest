@@ -11,14 +11,14 @@ if (!config.skipTests.includes("fundsCheck")) {
         let callTracker = "";
         const service = new FundsCheckService({
             quoteInvestingAmount: 100,
-            quoteSymbol: "BTC",
+            quoteSymbol: "EUR",
             kraken: new KrakenMock({
                 requestCb: async (method, params) => {
                     callTracker += "requestCb";
                     expect(method).toEqual(KRAKEN_PRIVATE_METHOD.Balance);
                     return <never> {
                         result: {
-                            BTC: 101
+                            EUR: 101
                         }
                     };
                 }
@@ -33,13 +33,13 @@ if (!config.skipTests.includes("fundsCheck")) {
     it("should throw if balance is less than investing amount", async () => {
         const service = new FundsCheckService({
             quoteInvestingAmount: 100,
-            quoteSymbol: "BTC",
+            quoteSymbol: "EUR",
             kraken: new KrakenMock({
                 requestCb: async (method, params) => {
                     expect(method).toEqual(KRAKEN_PRIVATE_METHOD.Balance);
                     return <never> {
                         result: {
-                            BTC: 99
+                            EUR: 99
                         }
                     };
                 }
@@ -58,13 +58,13 @@ if (!config.skipTests.includes("fundsCheck")) {
     it("should throw if balance is equal to investing amount", async () => {
         const service = new FundsCheckService({
             quoteInvestingAmount: 100,
-            quoteSymbol: "BTC",
+            quoteSymbol: "EUR",
             kraken: new KrakenMock({
                 requestCb: async (method, params) => {
                     expect(method).toEqual(KRAKEN_PRIVATE_METHOD.Balance);
                     return <never> {
                         result: {
-                            BTC: 100
+                            EUR: 100
                         }
                     };
                 }
