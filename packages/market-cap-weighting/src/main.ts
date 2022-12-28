@@ -24,8 +24,7 @@ async function main() {
 
     logger.info("Init asset mapper...");
     const assetMapper = new AssetMapper({
-        location: "",
-        resourceType: "file"
+        uri: EnvVars.MAPPING_URI
     });
     await assetMapper.updateMapping();
 

@@ -14,6 +14,7 @@ export class EnvVars extends AEnvVars {
     public static CRON_WITHDRAW_SCHEDULE = "";
     public static ENABLE_FILE_LOGGING = false;
     public static MONGO_DB_URL = "";
+    public static MAPPING_URI = "";
 
 
     public static load(): void {
@@ -43,13 +44,16 @@ export class EnvVars extends AEnvVars {
             });
             this.setVar("CRON_WITHDRAW_SCHEDULE", (envVar) => {
                 this.CRON_WITHDRAW_SCHEDULE = String(envVar);
-            }, "0 0 0 1 1 ? 1970"); // a date in the past. Will never execute
+            }, "0 0 31 2 *"); // on February 31st. Will never execute
             this.setVar("ENABLE_FILE_LOGGING", (envVar) => {
                 this.ENABLE_FILE_LOGGING = this.Boolean(envVar);
             }, false);
             this.setVar("MONGO_DB_URL", (envVar) => {
                 this.MONGO_DB_URL = String(envVar);
             }, "");
+            this.setVar("MAPPING_URI", (envVar) => {
+                this.MAPPING_URI = String(envVar);
+            }, "https://raw.githubusercontent.com/atz3n/kraken-invest/market-cap-weighting/packages/market-cap-weighting/asset-mapping.json");
         }, { testEnv: __dirname + "/../../test/test.env" });
     }
 
