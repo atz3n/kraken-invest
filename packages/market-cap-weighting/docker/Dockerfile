@@ -2,7 +2,7 @@
 # GET PRODUCTION DEPENDENCIES
 ###################################################################################################
 
-FROM node:16.15.1-alpine3.16 as deps-collector
+FROM node:16.18-alpine3.16 as deps-collector
 
 # Copy meta data
 COPY package.json .
@@ -16,7 +16,7 @@ RUN yarn install --prod --frozen-lockfile
 # BUILD PROJECT
 ###################################################################################################
 
-FROM node:16.15.1-alpine3.16 as builder
+FROM node:16.18-alpine3.16 as builder
 
 # Copy meta files
 COPY .eslintignore .
@@ -25,14 +25,17 @@ COPY tsconfig.json .
 COPY package.json .
 COPY yarn.lock .
 
-# Create a dummy test file to get the correct folder structure compiled
-RUN mkdir test && touch test/index.ts && echo "console.log('dummy')" > test/index.ts
-
 # Install dependencies
 RUN yarn install --frozen-lockfile
 
 # Copy source files
 COPY src ./src
+
+# Remove unit tests
+RUN find ./src -type d -name "__test__" -exec rm -rf {} +
+
+# Create a dummy test file to get the correct folder structure compiled
+RUN mkdir test && touch test/index.ts && echo "console.log('dummy')" > test/index.ts
 
 # Build app
 RUN yarn build
@@ -42,7 +45,7 @@ RUN yarn build
 # BUILD IMAGE
 ###################################################################################################
 
-FROM node:16.15.1-alpine3.16 as runner
+FROM node:16.18-alpine3.16 as runner
 
 # Set working directory
 WORKDIR /usr/app/
