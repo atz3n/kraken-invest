@@ -1,14 +1,14 @@
 import { config } from "../../../../../test/config";
 import { fail } from "../../../../../test/helpers";
 import { TaskServiceParams } from "../../../taskFactory";
-import { QuoteRequestsCalculationService } from "../quoteOrderRequestsCalculation.service";
+import { OrderRequestsCalculationService } from "../orderRequestsCalculation.service";
 
 
-if (!config.skipTests.includes("quoteRequestsCalculation")) {
-    it("should calculate the quote requests", async () => {
+if (!config.skipTests.includes("orderRequestsCalculation")) {
+    it("should calculate the order requests", async () => {
         let callTracker = "";
-        const service = new QuoteRequestsCalculationService({
-            quoteInvestingAmount: 100,
+        const service = new OrderRequestsCalculationService({
+            investingAmount: 100,
             quoteSymbol: "EUR",
             ratios: [
                 {
@@ -30,8 +30,8 @@ if (!config.skipTests.includes("quoteRequestsCalculation")) {
                     ratio: 0.1
                 }
             ],
-            quoteOrderRequestsCb: (quoteOrderRequests) => {
-                callTracker += "quoteOrderRequestsCb";
+            orderRequestsCb: (quoteOrderRequests) => {
+                callTracker += "orderRequestsCb";
                 expect(quoteOrderRequests.length).toEqual(3);
 
                 for (let i = 0 ; i < quoteOrderRequests.length ; i++) {
@@ -57,7 +57,7 @@ if (!config.skipTests.includes("quoteRequestsCalculation")) {
         });
 
         await service.run(<TaskServiceParams> {});
-        expect(callTracker.trim()).toEqual("quoteOrderRequestsCb");
+        expect(callTracker.trim()).toEqual("orderRequestsCb");
     });
 } else {
     test("dummy", () => {

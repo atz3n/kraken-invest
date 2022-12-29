@@ -1,11 +1,11 @@
 import { IKraken, KRAKEN_PRIVATE_METHOD, KRAKEN_PUBLIC_METHOD } from "@atz3n/kraken-invest-common";
-import { Order, QuoteOrderRequest } from "../../../types";
+import { Order, OrderRequest } from "../../../types";
 import { TaskService, TaskServiceParams } from "../../taskFactory";
 
 
 interface Options {
     kraken: IKraken;
-    quoteOrderRequests: QuoteOrderRequest[];
+    orderRequests: OrderRequest[];
     volumeDecimals: number;
     minVolumeCb: (baseSymbol: string, volume: number, minVolume: number) => void;
     buyCb: (
@@ -18,14 +18,14 @@ interface Options {
     boughtCb: (orders: Order[]) => Promise<void> | void;
 }
 
-export class QuoteBuyService implements TaskService {
+export class BuyService implements TaskService {
     constructor(private readonly options: Options) {}
 
 
     public async run(params: TaskServiceParams): Promise<void> {
         const orders: Order[] = [];
-        for (let i = 0 ; i < this.options.quoteOrderRequests.length ; i++) {
-            const { baseSymbol, quoteSymbol, quoteAmount } = this.options.quoteOrderRequests[i];
+        for (let i = 0 ; i < this.options.orderRequests.length ; i++) {
+            const { baseSymbol, quoteSymbol, quoteAmount } = this.options.orderRequests[i];
 
             const volume = await this.getVolume(
                 this.options.kraken,

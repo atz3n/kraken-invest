@@ -3,18 +3,18 @@ import { EnvVars } from "../../../lib/EnvVars";
 import { IAssetMapper } from "../../../lib/IAssetMapper";
 import { ICoinGecko } from "../../../lib/ICoinGecko";
 import { IStateStore } from "../../../storage/state/IStateStore";
-import { Order, QuoteOrderRequest, Ratio } from "../../../types";
+import { Order, OrderRequest, Ratio } from "../../../types";
 import { IScheduler } from "../../IScheduler";
 import { createTask, Task } from "../../taskFactory";
 import { CycleCounterCheckService } from "./cycleCounterCheck.service";
 import { FundsCheckService } from "./fundsCheck.service";
-import { QuoteBuyService } from "./quoteBuy.service";
-import { QuoteRequestsCalculationService } from "./quoteOrderRequestsCalculation.service";
+import { BuyService } from "./buy.service";
+import { OrderRequestsCalculationService } from "./orderRequestsCalculation.service";
 import { RatiosCalculationService } from "./ratiosCalculation.service";
 
 
 const ratios: Ratio[] = [];
-const quoteOrderRequests: QuoteOrderRequest[] = [];
+const orderRequests: OrderRequest[] = [];
 
 
 interface Params {
@@ -43,19 +43,19 @@ export function createBuyTask(params: Params): Task {
                     _ratios.forEach(ratio => ratios.push(ratio));
                 }
             }),
-            new QuoteRequestsCalculationService({
-                quoteInvestingAmount: EnvVars.QUOTE_INVESTING_AMOUNT,
+            new OrderRequestsCalculationService({
+                investingAmount: EnvVars.QUOTE_INVESTING_AMOUNT,
                 quoteSymbol: EnvVars.QUOTE_SYMBOL,
                 ratios,
-                quoteOrderRequestsCb: (_quoteOrderRequests) => {
-                    quoteOrderRequests.length = 0;
-                    _quoteOrderRequests.forEach(quoteOrderRequest => quoteOrderRequests.push(quoteOrderRequest));
+                orderRequestsCb: (_orderRequests) => {
+                    orderRequests.length = 0;
+                    _orderRequests.forEach(orderRequest => orderRequests.push(orderRequest));
                 }
             }),
-            new QuoteBuyService({
+            new BuyService({
                 kraken: params.kraken,
                 volumeDecimals: EnvVars.VOLUME_DECIMAL,
-                quoteOrderRequests,
+                orderRequests,
                 minVolumeCb: (baseSymbol, volume, minVolume) => {
                     // eslint-disable-next-line max-len
                     logger.info(`Skipping ${baseSymbol}. Minimum requested volume: ${minVolume}, calculated volume: ${volume}.`);

@@ -3,15 +3,15 @@ import { config } from "../../../../../test/config";
 import { fail, notCalled } from "../../../../../test/helpers";
 import { KrakenMock } from "../../../../../test/mocks/KrakenMock";
 import { TaskServiceParams } from "../../../taskFactory";
-import { QuoteBuyService } from "../quoteBuy.service";
+import { BuyService } from "../buy.service";
 
 
-if (!config.skipTests.includes("quoteBuy")) {
-    it("should buy the quote assets", async () => {
+if (!config.skipTests.includes("baseBuy")) {
+    it("should buy the assets", async () => {
         let callTracker = "";
-        const service = new QuoteBuyService({
+        const service = new BuyService({
             volumeDecimals: 2,
-            quoteOrderRequests: [
+            orderRequests: [
                 {
                     baseSymbol: "BTC",
                     quoteAmount: 70,
@@ -211,9 +211,9 @@ if (!config.skipTests.includes("quoteBuy")) {
 
     it("should not buy because of too low volume", async () => {
         let callTracker = "";
-        const service = new QuoteBuyService({
+        const service = new BuyService({
             volumeDecimals: 2,
-            quoteOrderRequests: [
+            orderRequests: [
                 {
                     baseSymbol: "BTC",
                     quoteAmount: 70,

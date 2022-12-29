@@ -7,7 +7,7 @@ export interface Ratio {
 }
 
 
-export interface QuoteOrderRequest {
+export interface OrderRequest {
     baseSymbol: string;
     quoteSymbol: string;
     quoteAmount: number;
