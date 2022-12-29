@@ -1,11 +1,11 @@
 import { IKraken, KRAKEN_PRIVATE_METHOD } from "@atz3n/kraken-invest-common";
-import { BaseAsset, CumVolume, Withdraw } from "../../../types";
+import { CumVolume, Withdraw } from "../../../types";
 import { TaskService, TaskServiceParams } from "../../taskFactory";
 
 
 interface Options {
     kraken: IKraken;
-    baseAssets: BaseAsset[];
+    baseAssets: {symbol: string, withdrawAddress: string}[];
     getCumVolumes: () => Promise<CumVolume[]> | CumVolume[];
     withdrawCb: (withdrawId: string, volume: number, symbol: string) => Promise<void> | void;
     withdrewCb: (withdraws: Withdraw[]) => Promise<void> | void;

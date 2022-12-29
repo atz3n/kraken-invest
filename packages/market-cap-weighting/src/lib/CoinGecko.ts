@@ -14,10 +14,7 @@ export class CoinGecko implements ICoinGecko {
 
         return assetIds.map((id) => {
             const cap = assetList.find(asset => asset.id === id)?.market_cap || 0;
-            return {
-                id,
-                cap
-            };
+            return { id, cap };
         });
     }
 }

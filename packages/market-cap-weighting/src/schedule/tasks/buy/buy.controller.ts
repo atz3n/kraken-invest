@@ -36,7 +36,7 @@ export function createBuyTask(params: Params): Task {
             }),
             new RatiosCalculationService({
                 assetMapper: params.assetMapper,
-                baseSymbols: (() => EnvVars.BASE_ASSETS.map(asset => asset.symbol))(),
+                baseAssets: EnvVars.BASE_ASSETS,
                 coinGecko: params.coinGecko,
                 ratiosCb: (_ratios) => {
                     ratios.length = 0;

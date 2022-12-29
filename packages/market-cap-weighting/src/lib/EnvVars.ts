@@ -72,23 +72,36 @@ export class EnvVars extends AEnvVars {
                 if (!Array.isArray(config)) {
                     this.BASE_ASSETS.push({
                         symbol: config,
-                        withdrawAddress: ""
+                        withdrawAddress: "",
+                        weight: 1
                     });
                     return;
                 }
 
+                let weight = 1;
+                let withdrawAddress = "";
+                for (let i = 1 ; i < config.length ; i++) {
+                    if (typeof config[i] === "string") {
+                        withdrawAddress = config[i];
+                    }
+                    if (typeof config[i] === "number") {
+                        weight = config[i];
+                    }
+                }
+
                 this.BASE_ASSETS.push({
                     symbol: config[0],
-                    withdrawAddress: config[1] || ""
+                    withdrawAddress,
+                    weight
                 });
             });
         } catch (error) {
             let message = "";
             message += "Could not load BASE_ASSETS\n";
-            message += "supported configuration format:\n";
-            message += "[[\"<symbol>\", \"<wallet address>\"], [\"<symbol>\"], \"<symbol>\"]\n";
+            message += "supported configuration formats (<> => required, {} => optional):\n";
+            message += "[[\"<symbol>\", \"{wallet address}\", {weight}], [\"<symbol>\", {weight}, \"{wallet address}\"], [\"<symbol>\"], \"<symbol>\"]\n";
             message += "for example:\n";
-            message += "[[\"BTC\", \"My BTC Wallet\"], [\"ETH\"], \"LTC\"]\n";
+            message += "[[\"BTC\", \"My BTC Wallet\", 0.5], [\"ETH\", 0.7], \"LTC\", [\"DOT\"]]\n";
             throw new Error(message);
         }
     }

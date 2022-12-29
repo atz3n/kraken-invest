@@ -31,6 +31,7 @@ export interface CumVolume {
 export interface BaseAsset {
     symbol: string;
     withdrawAddress: string;
+    weight: number;
 }
 
 

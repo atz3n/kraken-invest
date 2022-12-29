@@ -12,7 +12,11 @@ if (!config.skipTests.includes("ratiosCalculation")) {
     it("should calculate the ratios", async () => {
         let callTracker = "";
         const service = new RatiosCalculationService({
-            baseSymbols: [ "BTC", "ETH", "LTC" ],
+            baseAssets: [
+                { symbol: "BTC",weight: 0.5 },
+                { symbol: "ETH",weight: 1 },
+                { symbol: "LTC",weight: 2 },
+            ],
             assetMapper: new AssetMapperMock({
                 getMappingCb: (id) => {
                     callTracker += "getMappingCb ";
@@ -50,7 +54,7 @@ if (!config.skipTests.includes("ratiosCalculation")) {
                         if (assetId === "Bitcoin") {
                             marketCaps.push({
                                 id: assetId,
-                                cap: 70
+                                cap: 140
                             });
                         }
                         if (assetId === "Ethereum") {
@@ -62,7 +66,7 @@ if (!config.skipTests.includes("ratiosCalculation")) {
                         if (assetId === "Litecoin") {
                             marketCaps.push({
                                 id: assetId,
-                                cap: 10
+                                cap: 5
                             });
                         }
                     });
@@ -79,7 +83,7 @@ if (!config.skipTests.includes("ratiosCalculation")) {
                     const ratio = ratios[i];
                     if (ratio.coinGeckoId === "Bitcoin") {
                         expect(ratio.baseSymbol).toEqual("BTC");
-                        expect(ratio.cap).toEqual(70);
+                        expect(ratio.cap).toEqual(140);
                         expect(ratio.ratio).toEqual(0.7);
                         continue;
                     }
@@ -91,7 +95,7 @@ if (!config.skipTests.includes("ratiosCalculation")) {
                     }
                     if (ratio.coinGeckoId === "Litecoin") {
                         expect(ratio.baseSymbol).toEqual("LTC");
-                        expect(ratio.cap).toEqual(10);
+                        expect(ratio.cap).toEqual(5);
                         expect(ratio.ratio).toEqual(0.1);
                         continue;
                     }
