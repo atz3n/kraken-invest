@@ -1,6 +1,9 @@
 import axios from "axios";
 
 
+const COIN_GECKO_COIN_LIST_URL = "https://api.coingecko.com/api/v3/coins/list";
+
+
 async function main() {
     const params = [...process.argv];
     params.shift();
@@ -13,7 +16,7 @@ async function main() {
     }
 
     const symbol = params[0];
-    const { data } = await axios.get<{id: string, symbol: string, name: string}[]>("https://api.coingecko.com/api/v3/coins/list");
+    const { data } = await axios.get<{id: string, symbol: string, name: string}[]>(COIN_GECKO_COIN_LIST_URL);
     const coins = data.filter(_coin => _coin.symbol === symbol.toLowerCase());
     console.log("Potential Coins:", JSON.stringify(coins, null, 2));
 }
