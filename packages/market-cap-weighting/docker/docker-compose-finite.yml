@@ -1,22 +1,23 @@
 version: "3.8"
 networks:
-  asset-cost-averaging-network:
+  market-cap-weighting-network:
     external: false
 services:
-  asset-cost-averaging:
-    image: ghcr.io/atz3n/kraken-invest/asset-cost-averaging:latest
+  market-cap-weighting:
+    image: ghcr.io/atz3n/kraken-invest/market-cap-weighting:latest
     # To use the locally built image, comment the line above and uncomment the line below.
-    # image: asset-cost-averaging
+    # image: market-cap-weighting
     networks:
-      - asset-cost-averaging-network
-    environment: 
+      - market-cap-weighting-network
+    environment:
       # Minimum required configuration for finite mode.
-      # This configuration lets your bot buy BTC for EUR 5 times on every Saturday at 3am for 100€.
+      # This configuration lets your bot buy BTC and ETH for 100 EUR 5 times on every Saturday at 3am.
       # Total investment would be 100€ * 5 = 500€.
       # Check the settings.env file for the full set of configuration variables.
       - KRAKEN_API_KEY=<your Kraken API key>
       - KRAKEN_PRIVATE_KEY=<your Kraken private key>
-      - BASE_SYMBOL=XXBT
-      - QUOTE_SYMBOL=ZEUR
+      - BASE_ASSETS=["BTC", "ETH"]
+      - QUOTE_SYMBOL=EUR
       - QUOTE_INVESTING_AMOUNT=100
+      - CRON_BUY_SCHEDULE=0 3 * * 6
       - NUMBER_OF_BUYS=5 # remove this setting for infinite mode
