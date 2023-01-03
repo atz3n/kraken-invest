@@ -26,7 +26,7 @@ async function main() {
     }
 
     const symbol = params[0].toUpperCase();
-    const id = params[1];
+    const id = params[1].toLowerCase();
 
     const mapping = <Mapping[]> JSON.parse(readFileSync(MAPPING_FILE_PATH).toString());
     if (!checkMapping(mapping, symbol)) {
@@ -42,7 +42,7 @@ async function main() {
         coinGeckoId: id
     });
 
-    writeFileSync(MAPPING_FILE_PATH, JSON.stringify(mapping, null, 4));
+    writeFileSync(MAPPING_FILE_PATH, JSON.stringify(mapping, null, 2));
 }
 
 function checkMapping(mapping: Mapping[], symbol: string): boolean {

@@ -54,5 +54,5 @@ npx ts-node coinAdder.ts -h
 npx ts-node coinAdder.ts <coin symbol> <coin gecko id>
 
 # Example for eth
-npx ts-node coinFinder.ts eth ethereum
+npx ts-node coinAdder.ts eth ethereum
 ```
