@@ -18,5 +18,9 @@
   {
     "krakenId": "LINK",
     "coinGeckoId": "chainlink"
+  },
+  {
+    "krakenId": "ADA",
+    "coinGeckoId": "cardano"
   }
 ]
