@@ -26,4 +26,4 @@ if [ $(uname) == Linux ]; then
 fi
 
 cd ${HERE}/../docker
-${SUDO} docker-compose -p ${PROJECT_NAME} stop
+${SUDO} docker compose -p ${PROJECT_NAME} stop

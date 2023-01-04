@@ -8,9 +8,6 @@
 
 PROJECT_NAME="market-cap-weighting"
 
-COMPOSE_FILE="docker-compose-finite.yml"
-# COMPOSE_FILE="docker-compose-infinite.yml"
-
 
 ###################################################################################################
 # DEFINES
@@ -29,4 +26,4 @@ if [ $(uname) == Linux ]; then
 fi
 
 cd ${HERE}/../docker
-${SUDO} docker-compose -p ${PROJECT_NAME} -f ${COMPOSE_FILE} up -d
+${SUDO} docker compose -p ${PROJECT_NAME} up -d
