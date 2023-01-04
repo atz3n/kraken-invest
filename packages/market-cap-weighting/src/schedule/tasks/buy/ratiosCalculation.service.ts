@@ -33,12 +33,12 @@ export class RatiosCalculationService implements TaskService {
         });
 
         let sum = 0;
-        assetCaps.forEach(coin => sum += coin.weight * coin.cap);
+        assetCaps.forEach(asset => sum += asset.weight * asset.cap);
 
         const ratios: Ratio[] = [];
-        assetCaps.forEach((coin) => {
-            const ratio = (coin.weight * coin.cap) / sum;
-            ratios.push({ ...coin, ...{ ratio } });
+        assetCaps.forEach((asset) => {
+            const ratio = (asset.weight * asset.cap) / sum;
+            ratios.push({ ...asset, ...{ ratio } });
         });
 
         await this.options.ratiosCb(ratios);
