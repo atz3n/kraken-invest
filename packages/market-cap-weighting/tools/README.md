@@ -10,7 +10,7 @@ you must have node (v16 or later) and yarn installed. Before running the tools m
 
 ## Coin Mapping
 
-To get a coins market cap, the coin gecko API is used. Unfortunately coin gecko provides multiple coins under the same coin symbol, so that a mapping between the kraken id and the coin gecko id is needed. The mapping file `../asset-mapping.json` contains these mappings. There are two tools to support you in adding new coins to the mapping file. The *Coin Finder* lets you find possible coin gecko ids for a coin symbol (which is also the kraken id) and the *Coin Adder* supports you in adding proper mapping into the mapping file.
+To get a coins market cap, the CoinGecko API is used. Unfortunately CoinGecko provides multiple coins under the same coin symbol, so that a mapping between the Kraken id and the CoinGecko id is needed. The mapping file `../asset-mapping.json` contains these mappings. There are two tools to support you in adding new coins to the mapping file. The *Coin Finder* lets you find possible coin gecko ids for a coin symbol (which is also the kraken id) and the *Coin Adder* supports you in adding proper mapping into the mapping file.
 
 
 ### Coin Finder
