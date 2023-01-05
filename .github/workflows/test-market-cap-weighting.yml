@@ -1,0 +1,16 @@
+name: test market-cap-weighting project
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - packages/market-cap-weighting/**
+
+jobs:
+  test-market-cap-weighting:
+    uses: ./.github/workflows/test-project.yml
+    secrets: inherit
+    with:
+      project_dir: packages/market-cap-weighting
