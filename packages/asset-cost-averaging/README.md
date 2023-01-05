@@ -22,7 +22,7 @@ There are three ways to get the bot running. Each way requires you to have an AP
 
 ### 1. Docker Compose
 
-The easiest way to get started is to adapt the `./docker/docker-compse.yml` file and to start it with the following command:
+The easiest way to get started is to adapt the `./docker/docker-compose.yml` file and to start it with the following command:
 ```bash
 ./scripts/run-docker.sh
 ```
