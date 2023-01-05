@@ -53,7 +53,7 @@ export class EnvVars extends AEnvVars {
             }, "");
             this.setVar("MAPPING_URI", (envVar) => {
                 this.MAPPING_URI = String(envVar);
-            }, "https://raw.githubusercontent.com/atz3n/kraken-invest/market-cap-weighting/packages/market-cap-weighting/asset-mapping.json");
+            }, "https://raw.githubusercontent.com/atz3n/kraken-invest/main/packages/market-cap-weighting/asset-mapping.json");
         }, { testEnv: __dirname + "/../../test/test.env" });
     }
 
