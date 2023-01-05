@@ -1,0 +1,38 @@
+version: "3.8"
+networks:
+  market-cap-weighting-network:
+    external: false
+services:
+  market-cap-weighting:
+    image: ghcr.io/atz3n/kraken-invest/market-cap-weighting:latest
+    # To use the locally built image, comment the line above and uncomment the line below.
+    # image: market-cap-weighting
+    restart: always
+    depends_on:
+      - market-cap-weighting-db
+    networks:
+      - market-cap-weighting-network
+    environment:
+      # Full configuration for infinite mode.
+      # This configuration lets your bot buy BTC and ETH for 100 EUR infinite times on every Saturday at 3am.
+      # It adds a weighting factor of 0.8 to the BTC market capitalization.
+      # It also withdraws the funds on every first day of a month at 4am.
+      # In addition to that, file logging and state persistancy is also enabled.
+      # Check the settings.env file for the full set of configuration variables.
+      - KRAKEN_API_KEY=<your Kraken API key>
+      - KRAKEN_PRIVATE_KEY=<your Kraken private key>
+      - BASE_ASSETS=[["BTC", "<BTC wallet address>", 0.8], ["ETH", "<ETH wallet address>"]]
+      - QUOTE_SYMBOL=EUR
+      - QUOTE_INVESTING_AMOUNT=100
+      - CRON_BUY_SCHEDULE=0 3 * * 6
+      - ENABLE_FILE_LOGGING=true
+      - MONGO_DB_URL=mongodb://market-cap-weighting-db:27017
+    volumes:
+      - ../logs:/usr/app/logs
+  market-cap-weighting-db:
+    image: mongo:4.4.1-bionic
+    restart: always
+    networks:
+      - market-cap-weighting-network
+    volumes:
+      - ../data:/data/db

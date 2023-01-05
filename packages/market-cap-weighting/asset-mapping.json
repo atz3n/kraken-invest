@@ -1,0 +1,26 @@
+[
+  {
+    "krakenId": "BTC",
+    "coinGeckoId": "bitcoin"
+  },
+  {
+    "krakenId": "ETH",
+    "coinGeckoId": "ethereum"
+  },
+  {
+    "krakenId": "DOT",
+    "coinGeckoId": "polkadot"
+  },
+  {
+    "krakenId": "LTC",
+    "coinGeckoId": "litecoin"
+  },
+  {
+    "krakenId": "LINK",
+    "coinGeckoId": "chainlink"
+  },
+  {
+    "krakenId": "ADA",
+    "coinGeckoId": "cardano"
+  }
+]

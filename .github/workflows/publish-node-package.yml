@@ -1,0 +1,51 @@
+name: publish node package
+
+on:
+  workflow_call:
+    inputs:
+      project_dir:
+        required: true
+        type: string
+      version:
+        required: false
+        type: string
+        default: "patch"
+      name:
+        required: true
+        type: string
+
+jobs:
+  publish-lib:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.project_dir }}
+    
+    steps:
+      - name: Check out project
+        uses: actions/checkout@v3
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          registry-url: https://npm.pkg.github.com
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build project
+        run: yarn build
+
+      - name: Create and publish package
+        run: |
+          yarn publish --non-interactive --access restricted --${{ inputs.version }} --no-git-tag-version
+          echo PACKAGE_VERSION=$(grep version package.json | awk -F \" '{print $4}') >> $GITHUB_ENV
+          
+      - name: Update package version
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "chore(${{ inputs.name }}): update package version to ${{ env.PACKAGE_VERSION }}"
+          tagging_message: ${{ inputs.name }}-v${{ env.PACKAGE_VERSION }}

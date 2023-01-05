@@ -1,0 +1,36 @@
+{
+    "name": "market-cap-weighting",
+    "version": "1.0.0",
+    "license": "MIT",
+    "main": "main.js",
+    "scripts": {
+        "dev": "RUN_CONTEXT=development ts-node-dev --cache-directory ./dev ./src/main",
+        "lint": "eslint ./ --ext .ts",
+        "lint:fix": "eslint ./ --fix --ext .ts",
+        "test": "yarn test:unit && yarn test:e2e",
+        "test:unit": "RUN_CONTEXT=test jest --config=jest.unit.config.js",
+        "test:e2e": "RUN_CONTEXT=test jest --config=jest.e2e.config.js",
+        "build": "rm -rf ./dist && tsc",
+        "start": "node ./dist/src/main.js"
+    },
+    "devDependencies": {
+        "@types/jest": "^29.2.3",
+        "@types/node": "^15.0.3",
+        "@types/node-cron": "^3.0.2",
+        "@typescript-eslint/eslint-plugin": "^5.7.0",
+        "@typescript-eslint/parser": "^5.7.0",
+        "eslint": "^7.26.0",
+        "jest": "^29.3.1",
+        "ts-jest": "^29.0.3",
+        "ts-node-dev": "^1.1.6",
+        "tsc": "^2.0.3",
+        "typescript": "4.6.4"
+    },
+    "dependencies": {
+        "@atz3n/kraken-invest-common": "^1.0.1",
+        "axios": "^1.1.3",
+        "mongoose": "^6.5.0",
+        "node-cron": "^3.0.1",
+        "uuid": "^8.3.2"
+    }
+}

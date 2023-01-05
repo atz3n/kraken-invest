@@ -1,4 +1,4 @@
-name: build asset-cost-averaging image
+name: build market-cap-weighting image
 
 on:
   workflow_dispatch:
@@ -10,22 +10,22 @@ on:
     branches:
       - main
     paths:
-      - packages/asset-cost-averaging/**
+      - packages/market-cap-weighting/**
 
 jobs:
-  test-asset-cost-averaging:
+  test-market-cap-weighting:
     uses: ./.github/workflows/test-project.yml
     secrets: inherit
     with:
-      project_dir: packages/asset-cost-averaging
+      project_dir: packages/market-cap-weighting
 
-  build-asset-cost-averaging:
+  build-market-cap-weighting:
     needs:
-      - test-asset-cost-averaging
+      - test-market-cap-weighting
     uses: ./.github/workflows/build-image.yml
     secrets: inherit
     with:
-      project_dir: packages/asset-cost-averaging
+      project_dir: packages/market-cap-weighting
       registry_name: ghcr.io/atz3n/kraken-invest
-      image_name: asset-cost-averaging
+      image_name: market-cap-weighting
       version: ${{ github.event.inputs.version }}

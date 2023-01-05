@@ -5,7 +5,8 @@ This repository contains investment strategy bots that use the [Kraken](https://
 
 ## Currently implemented
 
-- [asset-cost-averaging](./asset-cost-averaging/) (a bot to periodically invest a fix amount)
+- [Asset Cost Averaging](./packages/asset-cost-averaging/) (a bot to periodically invest a fix amount)
+- [Market Cap Weighting](./packages/market-cap-weighting/) (a bot to periodically invest a fix amount in multiple assets depending on the market capitalization)
 
 
 ## Liability

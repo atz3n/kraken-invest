@@ -1,0 +1,29 @@
+name: Publish lib
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Package version
+        type: choice
+        options: 
+          - major
+          - minor
+          - patch
+        default: "patch"
+
+jobs:
+  test-lib:
+    uses: ./.github/workflows/test-project.yml
+    secrets: inherit
+    with:
+      project_dir: packages/lib
+
+  publish-lib:
+    needs: test-lib
+    uses: ./.github/workflows/publish-node-package.yml
+    secrets: inherit
+    with:
+      name: lib
+      project_dir: packages/lib
+      version: ${{ inputs.version }}
