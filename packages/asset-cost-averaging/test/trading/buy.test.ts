@@ -1,4 +1,4 @@
-import { IKraken, KRAKEN_PRIVATE_METHOD, KRAKEN_PUBLIC_METHOD } from "@atz3n/kraken-invest-lib";
+import { IKraken, KRAKEN_PRIVATE_METHOD, KRAKEN_PUBLIC_METHOD } from "@atz3n/kraken-invest-common";
 import { buyConditionally, initStateStore } from "../../src/helpers";
 import { EnvVars } from "../../src/lib/EnvVars";
 import { createStateStore } from "../../src/storage/state/stateStoreFactory";

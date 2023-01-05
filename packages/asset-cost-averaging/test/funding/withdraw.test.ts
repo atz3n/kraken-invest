@@ -1,4 +1,4 @@
-import { IKraken, KRAKEN_PRIVATE_METHOD, KRAKEN_PUBLIC_METHOD } from "@atz3n/kraken-invest-lib";
+import { IKraken, KRAKEN_PRIVATE_METHOD, KRAKEN_PUBLIC_METHOD } from "@atz3n/kraken-invest-common";
 import { initStateStore, withdrawConditionally } from "../../src/helpers";
 import { createStateStore } from "../../src/storage/state/stateStoreFactory";
 import { StateStoreInMemory } from "../../src/storage/state/StateStoreInMemory";
