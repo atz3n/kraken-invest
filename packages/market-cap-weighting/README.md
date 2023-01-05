@@ -7,34 +7,35 @@ The Market Cap Weighting Bot is an extended version of the [Asset Cost Averaging
 
 The bot uses the same mechanisms and provides the same functionality as described in the [Asset Cost Averaging Section](../asset-cost-averaging/README.md#general). In addition to that, it lets you configure multiple buy assets where the investment amount $a$ for each asset is determined by the market capitalization ratio $r$ using the following formulas:
 
-#### 1. $a_i$ = $r_i$ * $v$
+<span id="eq"></span>
 
-#### 2. $r_i$ = $w_i$ * $c_i$ / $t$
-
-#### 3. $t$ = $\sum_{i=1}^{n} w_i$ * $c_i$
+1. $$a_i = r_i v$$
+2. $$r_i = \frac{w_i c_i}{t}$$
+3. $$t = \sum_{i=1}^n w_i c_i$$
 
 $v$ is the configured investment amount, $w$ is an optional custom weighting factor for each asset (which is 1 by default), $c$ is the market capitalization of the asset and $t$ is the summed up total market capitalization.
 
-For example, if we have three assets, BTC, ETH, and LTC, and an investment amount of $100, the bot will first reach out to the [CoinGecko](https://www.coingecko.com) API to determine the market capitalization $c$ of each asset. Let's say BTC has a market cap of $1000, ETH has a market cap of $400 and LTC a market cap of $200. The next step would be to calculate the total market capitalization using [Equation 3](#3-t--sum_i1n-w_i--c_i). In our case (assuming a weighting factor of 1):
+For example, if we have three assets, BTC, ETH, and LTC, and an investment amount of $100, the bot will first reach out to the [CoinGecko](https://www.coingecko.com) API to determine the market capitalization $c$ of each asset. Let's say BTC has a market cap of $1000, ETH has a market cap of $400 and LTC a market cap of $200. The next step would be to calculate the total market capitalization using [Equation 3](#eq). In our case (assuming a weighting factor of 1):
 
-$t$ = $1000 + $400 + $200 = $1600 
+$$t = \$1000 + \$400 + \$200 = \$1600$$
 
-With $1600 as the total market capitalization and the help of [Equation 2](#2-r_i--w_i--c_i--t), the bot is now able to calculate the market cap ratio $r$ for each asset as follows:
+With $1600 as the total market capitalization and the help of [Equation 2](#eq), the bot is now able to calculate the market cap ratio $r$ for each asset as follows:
 
-$r_1$ = ($1000 / $1600) = 0.625 (BTC)
+$$r_1 = \frac{\$1000}{\$1600} = 0.625$$
 
-$r_2$ = ($400 / $1600) = 0.25 (ETH)
+$$r_2 = \frac{\$400}{\$1600} = 0.25$$
 
-$r_3$ = ($200 / $1600) = 0.125 (LTC)
+$$r_3 = \frac{\$200}{\$1600} = 0.125$$
 
-With $r$ and $v$ (and $w$ set to 1) in [Equation 1](#1-a_i--r_i--v), we get the asset investment amount $a$:
+With $r$ and $v$ (and $w$ set to 1) in [Equation 1](#eq), we get the asset investment amount $a$:
 
-$a_1$ = 0.625 * $100 = $62.5 (BTC)
+$$a_1 = 0.625 * \$100 = \$62.50$$
 
-$a_2$ = 0.25 * $100 = $25 (ETH)
+$$a_2 = 0.25 * \$100 = \$25$$
 
-$a_3$ = 0.125 * $100 = $12.5 (LTC)
+$$a_3 = 0.125 * \$100 = \$12.50$$
 
+With the above calculation steps, the bot determined an investment amount of $62.50 for BTC, $25 for ETH and $12.50 for LTC.
 
 The weighting factor $w$ lets you adjust the asset investment amount. This is useful in configurations with high and low market cap assets or to favour certain assets over others.
 
